@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendar</title>
+<link href='css/fullcalendar.css' rel='stylesheet' />
+<link href='css/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='js/moment.min.js'></script> 
+<script src='js/jquery.min.js'></script> 
+<script src='js/fullcalendar.min.js'></script> 
+<script src='js/lang/en-gb.js'></script> 
+<script>
+
+	$(document).ready(function() {
+		
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+			defaultDate: '2016-02-20',
+			selectable: true,
+			selectHelper: true,
+			select: function(start, end) {
+				var title = prompt('insert events:');
+				var eventData;
+				if (title) {
+					eventData = {
+						title: title,
+						start: start,
+						end: end
+					};
+					$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+				}
+				$('#calendar').fullCalendar('unselect');
+			},
+			editable: true,
+			eventLimit: true, // allow "more" link when too many events
+			events: [
+				
+				{
+					title: 'Warehouse inventory',
+					start: '2016-03-1',
+					end: '2016-03-1'
+				},
+				{
+					title: 'get Mrs. Stifler laptop',
+					start: '2016-03-12T10:30:00',
+					end: '2016-03-12T12:30:00'
+				},
+				{
+					title: 'Assitance Mr. Rights',
+					start: '2016-03-12T12:00:00'
+				},
+				{
+					title: 'Internal meeting',
+					start: '2016-03-12T14:30:00'
+				},
+				{
+					title: 'delivery PC Mr. Wooder',
+					start: '2016-03-12T17:30:00'
+				},
+				{
+					title: 'Meeting Mr. Lockend',
+					start: '2016-03-12T20:00:00'
+				},
+				{
+					title: 'Internal meeting',
+					start: '2016-03-13T07:00:00'
+				},
+				{
+					title: 'Assitance Lumen inc.',
+					start: '2016-03-16',
+					end: '2016-03-16'
+				},
+				{
+					title: 'Assitance Mr. Smith',
+					start: '2016-03-17T10:30:00',
+					end: '2016-03-17T12:30:00'
+				},
+				{
+					title: 'Printer delivery Mr. White',
+					start: '2016-03-20T16:00:00'
+				},
+				{
+					title: 'Internal meeting',
+					start: '2016-03-12T14:30:00'
+				},
+				{
+					title: 'Computer delivery Rockman Inc.',
+					start: '2016-03-25T10:30:00'
+				},
+				{
+					title: 'Meeting with Mr. Rowland',
+					start: '2016-03-26T20:00:00'
+				},
+				{
+					title: 'New computer stock - delivery',
+					start: '2016-03-27T07:00:00'
+				},
+				{
+					title: 'Warehouse inventory',
+					start: '2016-02-1',
+					end: '2016-02-1'
+				},
+				{
+					title: 'Participation on webiner "how to sellc omputers"',
+					start: '2016-02-3',
+					end: '2016-02-3'
+				},
+				{
+					title: 'Remote assistance for Mrs. Lanfranchi',
+					start: '2016-02-06T12:00:00'
+				},
+				{
+					title: 'Delivery new pc Mr. Stoner',
+					start: '2016-02-12T10:30:00',
+					end: '2016-02-12T12:30:00'
+				},
+				{
+					title: 'Computer repair Mr. Longhi',
+					start: '2016-02-12T12:00:00'
+				},
+				{
+					title: 'Internal meeting',
+					start: '2016-02-12T14:30:00'
+				},
+				{
+					title: 'Jessica Flower new pc delivery',
+					start: '2016-02-12T17:30:00'
+				},
+				{
+					title: 'Meeting with Mr. Leonardelli',
+					start: '2016-02-12T20:00:00'
+				},
+				{
+					title: 'New computer stock - delivery',
+					start: '2016-02-13T07:00:00'
+				},
+				{
+					title: 'New printers delivery Damge Inc.',
+					start: '2016-02-16T11:30:00',
+					end: '2016-02-16T12:30:00'
+				},
+				{
+					title: 'Pc assistance Mrs, Reddis',
+					start: '2016-02-17T10:30:00',
+					end: '2016-02-17T12:30:00'
+				},
+				{
+					title: 'toner delivery Mr.ra Roncade',
+					start: '2016-02-20T16:00:00'
+				},
+				{
+					title: 'Webinar',
+					start: '2016-02-12T14:30:00'
+				},
+				{
+					title: 'Computer delivery Mr. Smith',
+					start: '2016-02-25T10:30:00'
+				},
+				{
+					title: 'metting with Mr. Whitler',
+					start: '2016-02-26T20:00:00'
+				},
+				{
+					title: 'Control stocks products avaialbility',
+					start: '2016-02-27T07:00:00'
+				},
+				
+				
+				
+				
+				
+				{
+					title: 'Warehouse inventory',
+					start: '2016-04-1',
+					end: '2016-04-1'
+				},
+				{
+					title: 'get Mrs. Snow tablet',
+					start: '2016-04-12T10:30:00',
+					end: '2016-04-12T12:30:00'
+				},
+				{
+					title: 'Assitance Mr. Redmonds',
+					start: '2016-04-12T12:00:00'
+				},
+				{
+					title: 'Internal meeting',
+					start: '2016-04-12T14:30:00'
+				},
+				{
+					title: 'delivery hardware Mr. Popes',
+					start: '2016-04-12T17:30:00'
+				},
+				{
+					title: 'Meeting Mr. Starlights',
+					start: '2016-04-12T20:00:00'
+				},
+				{
+					title: 'Internal meeting',
+					start: '2016-04-13T07:00:00'
+				},
+				{
+					title: 'Assitance Omnia inc.',
+					start: '2016-04-16',
+					end: '2016-04-16'
+				},
+				{
+					title: 'Assitance Mr. Rowners',
+					start: '2016-04-17T10:30:00',
+					end: '2016-04-17T12:30:00'
+				},
+				{
+					title: 'Printer delivery Mr. Corcks',
+					start: '2016-04-20T16:00:00'
+				},
+				{
+					title: 'Internal meeting',
+					start: '2016-04-12T14:30:00'
+				},
+				{
+					title: 'Computer delivery Rockman Inc.',
+					start: '2016-04-25T10:30:00'
+				},
+				{
+					title: 'Meeting with Mr. Rowland',
+					start: '2016-04-26T20:00:00'
+				},
+				{
+					title: 'New computer stock - delivery',
+					start: '2016-04-27T07:00:00'
+				}
+				
+			]
+		});
+		
+	});
+
+</script>
+<style>
+body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+    font-size: 14px;
+}
+#calendar {
+    max-width: 900px;
+    margin: 0 auto;
+}
+</style>
+<link rel="icon" href="../assets/img/acme-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/acme.css">
+</head>
+
+<body class="acme-popup">
+<h4>To insert a new event click on the chosen date and enter the customer's name.</h4>
+<div id='calendar'></div>
+</body>
+</html>

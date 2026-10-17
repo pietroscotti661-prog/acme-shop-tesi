@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Acme computer - customers care & management</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="../assets/js/jquery-1.4.2.min.js"></script> 
+<script type="text/javascript" src="js/jquery.costEstimatr.js"></script> 
+<script type="text/javascript" src="js/tinymce/tinymce.min.js"></script> 
+
+<!-- estimatore del prezzo e dei giorni di consegna --> 
+<script type="text/javascript">
+            $(document).ready(function(){
+                $('#priceQuote').costEstimatr();
+				
+            });
+        </script> 
+
+<!-- editor risposta per cliente --> 
+<script type="text/javascript">
+        		tinymce.init({
+            	selector: "#mytextarea"
+        		});
+    	</script> 
+
+<!-- check su textearea empty e redirect a pagine successive --> 
+<script>
+		function validateForm(theForm) {
+			var risposta_cliente = tinyMCE.get('mytextarea').getContent();
+			
+		
+			if (tinyMCE.get('mytextarea').getContent() == '') {
+				alert("Please, write a reply to the customer’s request.");
+				return false;
+			} else {
+				
+					$('#formContainer').hide();
+					$('#messaggio_conferma').show();
+  					$('#evadi').css({ opacity: 0.8 });
+					$('#evadi').css("background-color","#ded8d8");
+					$('#evadi').val('The quote has been correctly sent to the customer.');
+					$('#evadi').css("color","red");
+						
+				return true;
+			}
+		}
+	</script>
+<link rel="icon" href="../assets/img/acme-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/acme.css">
+</head>
+<body class="acme-task acme-notobj">
+<div id="messaggio_conferma"> The request ticket has been correctly sent. The customer will receive an email with the required details and your reply. <br>
+  <br>
+  <a href="14_request_info6.html">Proceed with the next ticket</a> </div>
+<div id="formContainer">
+  <form id="priceQuote" action="" method="post">
+    <img src="../assets/img/acme-logo-light.svg" alt="ACME the computer shop" align="right">
+    <h1><span>Acme computer shop</span></h1>
+    <div id="menu">
+      <ul>
+        <li><a href="#" onClick="window.open('help_desk.html','ACME help desk','scrollbars=1,resizable,height=500,width=600'); return false;">Acme helpdesks </a></li>
+        <li><a href="#" onClick="window.open('calendar.html','ACME appoitments calendar','scrollbars=1,resizable,height=500,width=600'); return false;">Customers’ appointments calendar </a></li>
+        <li>Products catalogue
+          <ul>
+            <li><a href="#" onClick="window.open('catalogue_printers.html','ACME printer catalogue','scrollbars=1,resizable,height=500,width=700'); return false;">Printer catalogue </a></li>
+            <li><a href="#" onClick="window.open('catalogue_notebook.html','ACME notebook catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Laptop and notebook catalogue</a></li>
+            <li><a href="#" onClick="window.open('catalogue_monitor.html','ACME monitor catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Monitor Catalogue</a></li>
+            <li><a href="#" onClick="window.open('catalogue_toner.html','ACME toner catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Printer toner catalogue</a></li>
+            <li><a href="#" onClick="window.open('catalogue_software.html','ACME software catalogue','scrollbars=1,resizable,height=500,width=800'); return false;">Software catalogue</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div id="intro" class="sectionWrap">
+<div class="ticket-meta">
+      <h2>Request no. 007</h2>
+      <h2>Customer no. 007</h2>
+      <h2 style="color: #0099FF; font-size:20px" id="budget">Customer approximate budget: -- </h2>
+</div>
+<div class="ticket-body">
+      <p><span style="color: #0099FF; font-size:20px" id="budget" class="font"><span class="font" style="color: #0099FF; font-size:20px">Customer’s  request</span>: </span>Hello, I am desperately looking for a toner for a printer and I cannot find it in any dealer. Someone has suggested that you might carry it. The toner that I&rsquo;m searching for is: TONER C13S050036 EPSON CYAN ACULASER.<br>
+        <br>
+        Do you have stock availability? if yes, how many pieces and how much? <br>
+        thanks a lot</p>
+    </div>
+</div>
+    <div id="rispondi">
+    <div id="textarea">
+    <h2>Reply to the customer :</h2>
+    <textarea rows="15" id="mytextarea"></textarea>
+    <p>
+      <input id="evadi" type="button" onclick="return validateForm();" value="Confirm your answer. An email will be automatically sent to the customer.">
+    </p>
+  </form>
+</div>
+<div id="tool">
+  <h2>Useful tools</h2>
+  <a href="#" onClick="window.open('help_desk.html','ACME help desk centers','scrollbars=1,resizable,height=500,width=600'); return false;">Acme helpdesks </a> <a href="#" onClick="window.open('calendar.html','ACME calendar','scrollbars=1,resizable,height=500,width=600'); return false;">Customers’ appointments calendar </a> <a href="#" onClick="window.open('catalogue_printers.html','ACME printer catalogue','scrollbars=1,resizable,height=500,width=700'); return false;">Printer catalogue </a> <a href="#" onClick="window.open('catalogue_notebook.html','ACME printer catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Laptop and notebook catalogue</a> <a href="#" onClick="window.open('catalogue_monitor.html','ACME monitor catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Monitor Catalogue</a> <a href="#" onClick="window.open('catalogue_toner.html','ACME toner catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Printer toner catalogue</a> <a href="#" onClick="window.open('catalogue_software.html','ACME software catalogue','scrollbars=1,resizable,height=500,width=800'); return false;">Software catalogue</a> </div>
+<!-- end of div rispondi-->
+
+<div class="clear"></div>
+</div>
+</body>
+</html>

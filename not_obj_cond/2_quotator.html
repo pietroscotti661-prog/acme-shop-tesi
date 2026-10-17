@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Acme computer - customers care</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="../assets/js/jquery-1.4.2.min.js"></script> 
+<script type="text/javascript" src="js/jquery.costEstimatr.js"></script> 
+<script type="text/javascript" src="js/tinymce/tinymce.min.js"></script> 
+
+<!-- estimatore del prezzo e dei days di consegna --> 
+<script type="text/javascript">
+            $(document).ready(function(){
+                $('#priceQuote').costEstimatr();
+				
+            });
+        </script> 
+
+<!-- editor risposta per cliente --> 
+<script type="text/javascript">
+        		tinymce.init({
+            	selector: "#mytextarea"
+        		});
+    	</script> 
+
+<!-- check su textearea empty e redirect a pagine successive --> 
+<script>
+		function validateForm(theForm) {
+			var risposta_cliente = tinyMCE.get('mytextarea').getContent();
+			
+		
+			if (tinyMCE.get('mytextarea').getContent() == '') {
+				alert("Please, write a reply to the customer’s request.");
+				return false;
+			} else {
+				
+					$('#formContainer').hide();
+					$('#messaggio_conferma').show();
+  					$('#evadi').css({ opacity: 0.8 });
+					$('#evadi').css("background-color","#ded8d8");
+					$('#evadi').val('The quote has been correctly sent to the customer.');
+					$('#evadi').css("color","red");
+						
+				return true;
+			}
+		}
+	</script>
+<link rel="icon" href="../assets/img/acme-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/acme.css">
+</head>
+<body class="acme-task acme-notobj">
+<div id="messaggio_conferma"> The request ticket has been correctly sent. The customer will receive an email with the required details and your reply.<br>
+  <br>
+  <a href="3_appointment.html">Proceed with the next ticket.</a> </div>
+<div id="formContainer">
+  <form id="priceQuote" action="" method="post">
+    <img src="../assets/img/acme-logo-light.svg" alt="ACME the computer shop" align="right">
+    <h1><span>Acme computer shop</span></h1>
+    <div id="menu">
+      <ul>
+        <li><a href="#" onClick="window.open('help_desk.html','ACME help desk','scrollbars=1,resizable,height=500,width=600'); return false;">Acme helpdesks </a></li>
+        <li><a href="#" onClick="window.open('calendar.html','ACME appoitments calendar','scrollbars=1,resizable,height=500,width=600'); return false;">Customers’ appointments calendar </a></li>
+        <li>Products catalogue
+          <ul>
+            <li><a href="#" onClick="window.open('catalogue_printers.html','ACME printer catalogue','scrollbars=1,resizable,height=500,width=700'); return false;">Printer catalogue </a></li>
+            <li><a href="#" onClick="window.open('catalogue_notebook.html','ACME notebook catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Laptop and notebook catalogue</a></li>
+            <li><a href="#" onClick="window.open('catalogue_monitor.html','ACME monitor catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Monitor Catalogue</a></li>
+            <li><a href="#" onClick="window.open('catalogue_toner.html','ACME toner catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Printer toner catalogue</a></li>
+            <li><a href="#" onClick="window.open('catalogue_software.html','ACME software catalogue','scrollbars=1,resizable,height=500,width=800'); return false;">Software catalogue</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div id="intro" class="sectionWrap">
+<div class="ticket-meta">
+      <h2>Order no. 002</h2>
+      <h2>Customer no. 002</h2>
+      <h2 style="color: #0099FF; font-size:20px" id="budget">Customers approximate budget: not specified </h2>
+</div>
+<div class="ticket-body">
+      <p>Good morning, I would be interested in purchasing a PC (without monitor) and a printer, keeping costs as low as possible. The PC will be used as an office PC with basic functions and rarely used ... for this I would like to spend as little as possible. I do not need a monitor.<br>
+        <br>
+        Thanks so much,<br>
+        <br>
+        My mail is germano_lucarelli@hotmail.com.</p>
+      <p>I await your answer, Germano. </p>
+    </div>
+</div>
+    <div id="content">
+    <div id="left_column">
+      <h4>Estimated quote price </h4>
+      <div id="costETAWrap">
+        <div id="costETA">
+          <p>Order's cost: € <span id="price">0.00</span></p>
+          <p>Delivery time: <span id="days">0</span> days</p>
+        </div>
+      </div>
+      <div id="matricola"></div>
+    </div>
+    <div id="ordine">
+      <div id="designDetails" class="sectionWrap cat-computer">
+        <h4>Available computers</h4>
+        <p>Select a computer to fulfil the order
+          Order</p>
+        <select name="designs" id="designs">
+          <option value="0">Select a computer model</option>
+          <option value="389">HP Z110 - cpu i3 - 2 giga RAM - €
+          389</option>
+          <option value="379">Acer OneX - cpu i3 - 2 giga RAM - €
+          379</option>
+          <option value="389">HP Z130 - cpu i3 - 4 giga RAM - €
+          389</option>
+          <option value="400">HP Z140 - cpu i3 - 4 giga RAM - €
+          400</option>
+          <option value="404">Acer OneX - cpu i3 - 4 giga RAM - €
+          404</option>
+          <option value="415">HP Z150 - cpu i5 - 4 giga RAM - €
+          415</option>
+          <option value="425">HP Z151 - cpu i5 - 4 giga RAM - €
+          425</option>
+          <option value="408">HP Z151 plus - cpu i5 - 4 giga RAM - €
+          408</option>
+          <option value="440">HP Z160 - cpu i5 - 4 giga RAM - €
+          440</option>
+          <option value="434">HP Z170 - cpu i5 - 4 giga RAM - €
+          434</option>
+          <option value="452">Acer powermate k1 - cpu i3 - 4 giga RAM - €
+          452</option>
+          <option value="465">Acer powermate  kz1- cpu i3 - 6 giga RAM - €
+          465</option>
+          <option value="485">Acer powermate ah2- cpu i3 - 4 giga RAM - €
+          485</option>
+          <option value="496">Acer powermate ak3- cpu i5 - 4 giga RAM - €
+          496</option>
+          <option value="500">Acer powermate one plus- cpu i5 - 6 giga RAM - €
+          500</option>
+          <option value="500">Acer powermate Zh3- cpu i5 - 6 giga RAM - €
+          500</option>
+          <option value="505">Acer powermate ZZ92- cpu i5 - 4 giga RAM - €
+          505</option>
+          <option value="510">Acer Aspire travel1- cpu i5 - 4 giga RAM - €
+          510</option>
+          <option value="512">Acer Aspire PlusTwo- cpu i5 - 6 giga RAM - €
+          512</option>
+          <option value="524">Acer Aspire xk23- cpu i5 - 4 giga RAM - €
+          524</option>
+          <option value="526">AAcer Aspire xk24- cpu i5 - 4 giga RAM - €
+          526</option>
+          <option value="530">Acer Aspire Lm2- cpu i5 - 6 giga RAM - €
+          530</option>
+          <option value="540">Acer Aspire Lm4- cpu i7 - 4 giga RAM - €
+          540</option>
+          <option value="545">Acer Aspire Lm6- cpu i7 - 4 giga RAM - €
+          545</option>
+          <option value="558">Asus lexus asK12- cpu i5 - 6 giga RAM - €
+          558</option>
+          <option value="569">Asus lexus ask13- cpu i5 - 6 giga RAM - €
+          569</option>
+          <option value="592">Asus lexus ask16- cpu i5 - 4 giga RAM - €
+          592</option>
+          <option value="600">Asus lexus ask19- cpu i5 - 4 giga RAM - €
+          600</option>
+          <option value="598">Asus lexus ask22- cpu i5 - 6 giga RAM - €
+          598</option>
+          <option value="600">Asus lexus new23- cpu i7 - 6 giga RAM - €
+          600</option>
+          <option value="601">Asus lexus new24- cpu i7 - 6 giga RAM - €
+          601</option>
+          <option value="649">Lenovo power plus a1- cpu i7 - 8 giga RAM - €
+          649</option>
+          <option value="669">Lenovo power plus a2- cpu i7 - 8 giga RAM - €
+          669</option>
+          <option value="670">Lenovo power plus a3- cpu i7 - 8 giga RAM - €
+          670</option>
+          <option value="699">Lenovo power plus a4- cpu i7 - 12 giga RAM - €
+          699</option>
+        </select>
+        <div class="clear"></div>
+      </div>
+      <div id="designDetails" class="sectionWrap cat-media">
+        <h4>External media</h4>
+        <div class="rdioChk">
+          <input type="checkbox" name="logoDesign" value="30" id="logoDesign">
+          <label for="logoDesign">External speakers - HP 2.0 <span>€
+            30</span></label>
+        </div>
+        <div class="rdioChk">
+          <input type="checkbox" name="businessCards" value="20" id="businessCards">
+          <label for="businessCards">Mouse scroll 3 buttons <span>€
+            20</span></label>
+        </div>
+        <div class="rdioChk">
+          <input type="checkbox" name="brochure" value="40" id="brochure">
+          <label for="brochure">Compact keyboard<span>€
+            40</span></label>
+        </div>
+        <div class="clear"></div>
+        <div class="rdioChk">
+          <input type="checkbox" name="brochure" value="40" id="webcam">
+          <label for="webcam">External webcam <span>€
+            40</span></label>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div id="designDetails" class="sectionWrap cat-accessory">
+        <h4>Accessories </h4>
+        <p>Select the accessories</p>
+        <select name="designs" id="designs">
+          <option value="0">Select an option</option>
+          <option value="5">mouse carpet - €
+          5</option>
+          <option value="5">keyboard anti-dust cover- €
+          5</option>
+          <option value="15">dvd player- €
+          15</option>
+          <option value="74">dolby surround system- €
+          74</option>
+          <option value="30">wi-fi card €
+          30</option>
+        </select>
+        <div class="clear"></div>
+      </div>
+      <div id="designDetails" class="sectionWrap cat-note">
+        <h2>Note:</h2>
+        <p>any requests for printers, monitors, toner and software are to be estimated and communicated separately by consulting the specific catalog.</p>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <!-- end of div content-->
+    
+    <div id="rispondi">
+    <div id="textarea">
+    <h2>Reply to Customer:</h2>
+    <textarea rows="15" id="mytextarea"></textarea>
+    <p>
+      <input id="evadi" type="button" onclick="return validateForm();" value="Confirm the quote. An email will be automatically sent to the customer.
+">
+    </p>
+  </form>
+</div>
+<div id="tool">
+  <h2>Useful tools</h2>
+  <a href="#" onClick="window.open('help_desk.html','ACME help desk centers','scrollbars=1,resizable,height=500,width=600'); return false;">Acme helpdesks </a> <a href="#" onClick="window.open('calendar.html','ACME calendar','scrollbars=1,resizable,height=500,width=600'); return false;">Customers’ appointments calendar </a> <a href="#" onClick="window.open('catalogue_printers.html','ACME printer catalogue','scrollbars=1,resizable,height=500,width=700'); return false;">Printer catalogue </a> <a href="#" onClick="window.open('catalogue_notebook.html','ACME printer catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Laptop and notebook catalogue</a> <a href="#" onClick="window.open('catalogue_monitor.html','ACME monitor catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Monitor Catalogue</a> <a href="#" onClick="window.open('catalogue_toner.html','ACME toner catalogue','scrollbars=1,resizable,height=500,width=750'); return false;">Printer toner catalogue</a> <a href="#" onClick="window.open('catalogue_software.html','ACME software catalogue','scrollbars=1,resizable,height=500,width=800'); return false;">Software catalogue</a> </div>
+<!-- end of div rispondi-->
+
+<div class="clear"></div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assitance centers</title>
+<script src="../assets/js/jquery-1.10.2.min.js"></script> 
+<link href="css/theme.default.min.css" rel="stylesheet">
+<script src="js/jquery.tablesorter.min.js"></script> 
+<script src="js/jquery.tablesorter.widgets.min.js"></script> 
+<script>
+	
+	$(function(){
+		$('table').tablesorter({
+			widgets        : ['zebra', 'columns'],
+			usNumberFormat : false,
+			sortReset      : true,
+			sortRestart    : true
+		});
+	});
+	</script>
+<link rel="icon" href="../assets/img/acme-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/acme.css">
+</head>
+
+<body class="acme-popup acme-table">
+<table width="100%" border=0 cellpadding=0 cellspacing=0 style='border-collapse:
+ collapse;table-layout:fixed'>
+  <thead>
+    <tr>
+      <th width="20%">Order by region</th>
+      <th width="10%">Order by city</th>
+      <th width="20%">Phone number</th>
+      <th width="50%">Address</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Aberdeenshire</td>
+    <td>Aberdeen</td>
+    <td>0131 472 2222</td>
+    <td>Lord Cullen   House,<br />
+      Fraser Place,<br />
+      Aberdeen</td>
+  </tr>
+  <tr>
+    <td>East Scotland</td>
+    <td>Edinburgh</td>
+    <td>0131   472 2222</td>
+    <td>Ocean   Point One, 94 Ocean Drive</td>
+  </tr>
+  <tr>
+    <td>East Scotland</td>
+    <td>St   Andrews</td>
+    <td>0131   472 2222</td>
+    <td>St   Andrews Local Office<br />
+      70 Market Street</td>
+  </tr>
+  <tr>
+    <td>East Scotland</td>
+    <td>Stirling</td>
+    <td>0131   472 2222</td>
+    <td>Old   Town Jail<br />
+      St John Street</td>
+  </tr>
+  <tr>
+    <td>Highlands</td>
+    <td>Inverness</td>
+    <td>0131   472 2222</td>
+    <td>Castle   Wynd,<br />
+      Inverness</td>
+  </tr>
+  <tr>
+    <td>Highlands</td>
+    <td>Isle   of Lewis</td>
+    <td>0131   472 2222</td>
+    <td>26   Cromwell Street<br />
+      Stornoway</td>
+  </tr>
+  <tr>
+    <td>South Scotland</td>
+    <td>Selkirk</td>
+    <td>01387   245550</td>
+    <td>Shepherds   Mill, Whinfield Road</td>
+  </tr>
+  <tr>
+    <td>Tayside</td>
+    <td>Perth</td>
+    <td>01738   627958</td>
+    <td>Lower   City Mills, West Mill Street</td>
+  </tr>
+  <tr>
+    <td>West Scotlaand </td>
+    <td>Glasgow</td>
+    <td>0131   472 2222</td>
+    <td>11   George Square</td>
+  </tr>
+</table>
+	</body>
+</html>

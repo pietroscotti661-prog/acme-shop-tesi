@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Arkanoid testing  </title>
+        <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/breakout.css" media="screen, print" rel="stylesheet" type="text/css" />
+		<link href="css/countdown_style.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="../../assets/js/jquery-1.4.2.min.js"></script>
+		
+		
+		<script>
+				jQuery(document).ready(function(){
+					
+					setTimeout(function () {
+			   $("#container").fadeOut("slow"); //will redirect to your blog page (an ex: blog.html)
+			}, 120000); //will call the function after 73 secs.
+					
+					
+					setTimeout(function () {
+			   window.location.href = "../level5/index.html"; //will redirect to your blog page (an ex: blog.html)
+			}, 121000); //will call the function after 73 secs.
+			
+				});
+		
+		</script>
+      
+	<link rel="icon" href="../../assets/img/acme-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/acme.css">
+</head>
+
+	<body class="acme-game">
+    
+		<div id="container">
+		
+		
+       <h1>Level 4. The next level will start within:</h1>
+<div id="clockdiv">
+  
+  <div>
+    <span class="minutes"></span>
+    <div class="smalltext">Minutes</div>
+  </div>
+  <div>
+    <span class="seconds"></span>
+    <div class="smalltext">Seconds</div>
+  </div>
+</div>
+  
+   
+    
+
+    
+ 		<div id="breakout">
+    <canvas id="canvas">
+      <div class="unsupported">
+        Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
+      </div>
+    </canvas>
+    <div id="levels">
+      <img id="next" class="disabled" src="images/up.png"   title="next level">
+      <img id="prev" class="disabled" src="images/down.png" title="previous level">
+      <span id="label">level:</span><span id="level"></span>
+    </div>
+    <div id="controls">
+      <input id="sound" type="checkbox" />
+      <label for="sound">sound</label>
+    </div>
+    <div id="instructions" style="display:none;">
+      <div class="keyboard">
+        <b>Press spacebar</b> to start<br>
+        <b>move the bar using the arrow keys<br></b>
+        
+      </div>
+      <div class="touch">
+        <b>click here</b> to start<br>
+        <b>use the bar</b> to move<br>
+      </div>
+    </div>
+  </div>
+
+	</div>	
+		
+<script  src="js/index.js"></script>	
+  <script src="js/game.js"></script>
+  <script src="js/breakout.js"></script>
+  <script src="js/levels.js"></script>
+		
+		 <script>
+  Game.ready(function() {
+    var game = Game.start('canvas', Breakout);
+  });
+  </script>
+ 
+ 
+		
+		
+
+    </body>
+</html>
