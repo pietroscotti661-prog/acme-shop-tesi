@@ -3745,6 +3745,231 @@ body.acme-data .dv-switch .dv-switch-text {
   }
 }
 
+/* ---------- data page: automatic analysis ---------- */
+
+.dv-an {
+  padding: 24px;
+}
+
+.dv-an-intro {
+  max-width: 74ch;
+  margin: 0 0 18px;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.dv-an-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.dv-an-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dv-an-q {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface-2);
+}
+
+.dv-an-q p {
+  margin: 0;
+}
+
+.dv-an-q-meta {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.dv-an-q-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.dv-an-table {
+  width: 100%;
+  min-width: 0;
+}
+
+.dv-an-table th {
+  padding: 8px 10px;
+}
+
+.dv-an-table td {
+  padding: 9px 10px;
+  white-space: normal;
+}
+
+.dv-an-table td.dv-num {
+  white-space: nowrap;
+}
+
+.dv-an-summary tbody tr {
+  cursor: pointer;
+}
+
+.dv-an-summary tbody tr:hover td,
+.dv-an-summary tbody tr.is-open td {
+  background: var(--accent-wash);
+}
+
+.dv-an-off td {
+  color: var(--muted);
+}
+
+.dv-an-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid var(--line-ctl);
+  color: var(--ink-2);
+  font: 600 11px/1.3 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dv-an-badge.is-sig {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+.dv-an-badge.is-near {
+  border-color: var(--ochre-line);
+  background: var(--ochre-wash);
+  color: var(--ochre-ink);
+}
+
+.dv-an-detail {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--ink);
+}
+
+.dv-an-dhead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+}
+
+.dv-an-dhead h3 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.dv-an-read {
+  max-width: 72ch;
+  margin: 12px 0 20px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.dv-an-two {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.dv-an-plot {
+  margin: 0;
+}
+
+.dv-an-plot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dv-an-plot figcaption {
+  margin-top: 4px;
+  color: var(--muted);
+  font: 500 11px var(--mono);
+}
+
+.dv-an-lab {
+  font-size: 11px;
+}
+
+.dv-an-ci {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.dv-an-pt {
+  fill: var(--accent);
+}
+
+.dv-an-tests,
+.dv-an-notes {
+  max-width: 82ch;
+  margin: 18px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dv-an-tests li {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font: 500 13px/1.5 var(--mono);
+}
+
+.dv-an-notes li {
+  position: relative;
+  padding: 3px 0 3px 18px;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.dv-an-notes li::before {
+  content: "";
+  position: absolute;
+  top: 0.8em;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  background: var(--ochre-line);
+}
+
+.dv-an-comp,
+.dv-an-empty {
+  max-width: 82ch;
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+@media (min-width: 1280px) {
+  .dv-an-two {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .dv-an {
+    padding: 16px;
+  }
+}
+
 /* Small positive interaction video pop-up (assets/js/spi-popup.js) */
 /* Where: the free area of the side rail, under the countdown, always the same spot and never over the task.
    spi-popup.js sets top (countdown bottom + 14 px), left and width inline; on screens 1024 px and wider

@@ -14,8 +14,9 @@
   <nav class="dv-nav">
     <a href="#overview"><span>01</span>Overview</a>
     <a href="#charts"><span>02</span>Charts</a>
-    <a href="#sessions"><span>03</span>Sessions</a>
-    <a href="#transfer"><span>04</span>Export and import</a>
+    <a href="#analysis"><span>03</span>Analysis</a>
+    <a href="#sessions"><span>04</span>Sessions</a>
+    <a href="#transfer"><span>05</span>Export and import</a>
   </nav>
   <div class="dv-source">
     <p class="dv-mono-label">Source</p>
@@ -88,8 +89,33 @@
       </div>
     </section>
 
+    <section id="analysis" class="dv-section" aria-labelledby="dv-analysis-title">
+      <h2 class="dv-section-title" id="dv-analysis-title"><span>03</span>Analysis</h2>
+      <div class="dv-panel dv-an">
+        <p class="dv-an-intro">Runs by itself on every refresh. Compares the groups on each measure with Welch tests and rank tests, corrects across measures with Holm, and gives effect sizes. Click a row for the detail. The main outcome of the study is the questionnaire: import its CSV below to analyse it the same way.</p>
+        <div class="dv-an-controls">
+          <label class="dv-select"><span class="dv-visually-hidden">Compare</span><select id="dv-an-group"></select></label>
+          <label class="dv-an-check"><input type="checkbox" id="dv-an-done" checked><span>Completed sessions only</span></label>
+          <button type="button" class="dv-btn dv-btn--ghost" id="dv-an-copy">Copy report</button>
+          <button type="button" class="dv-btn dv-btn--ghost" id="dv-an-dataset">Dataset CSV</button>
+        </div>
+        <div class="dv-an-q">
+          <p class="dv-mono-label">Questionnaire</p>
+          <p class="dv-an-q-meta" id="dv-an-q-meta"></p>
+          <div class="dv-an-q-actions">
+            <button type="button" class="dv-btn dv-btn--ghost" id="dv-an-q-import">Import CSV</button>
+            <label class="dv-select"><span class="dv-visually-hidden">Participant code column</span><select id="dv-an-q-id" hidden></select></label>
+            <button type="button" class="dv-btn dv-btn--ghost" id="dv-an-q-clear" hidden>Remove</button>
+          </div>
+          <input type="file" id="dv-an-q-file" accept=".csv,text/csv,text/plain" hidden>
+        </div>
+        <div id="dv-an-summary" class="dv-an-summary"></div>
+        <div id="dv-an-detail" class="dv-an-detail"></div>
+      </div>
+    </section>
+
     <section id="sessions" class="dv-section" aria-labelledby="dv-sessions-title">
-      <h2 class="dv-section-title" id="dv-sessions-title"><span>03</span>Sessions <small id="dv-count"></small></h2>
+      <h2 class="dv-section-title" id="dv-sessions-title"><span>04</span>Sessions <small id="dv-count"></small></h2>
       <div class="dv-panel dv-table-panel">
         <div class="dv-toolbar">
           <label class="dv-search">
@@ -124,7 +150,7 @@
   </div>
 
   <section id="transfer" class="dv-section" aria-labelledby="dv-transfer-title">
-    <h2 class="dv-section-title" id="dv-transfer-title"><span>04</span>Export and import</h2>
+    <h2 class="dv-section-title" id="dv-transfer-title"><span>05</span>Export and import</h2>
     <div class="dv-transfer">
       <div class="dv-panel dv-tcard">
         <p class="dv-mono-label">Export</p>
@@ -185,6 +211,8 @@
 
 <div class="dv-toast" id="dv-toast" role="status" aria-live="polite"></div>
 <input type="file" id="dv-file" accept=".json,application/json" hidden>
+<script src="assets/js/data-stats.js"></script>
+<script src="assets/js/data-analysis.js"></script>
 <script src="assets/js/data-view.js"></script>
 </body>
 </html>

@@ -350,6 +350,7 @@
     renderOrderChart();
     renderFilters();
     renderTable();
+    if (window.ACME_ANALYSIS) window.ACME_ANALYSIS.render();
     if (state.openSid) openDrawer(state.openSid);
   }
 
@@ -657,6 +658,14 @@
 
   function init() {
     state.idb = idbAvailable();
+    if (window.ACME_ANALYSIS) {
+      window.ACME_ANALYSIS.init({
+        COND: COND, TIMED: TIMED, stepOf: stepOf, isTimedOrder: isTimedOrder, esc: esc,
+        sessions: function () { return state.sessions; }, isSample: function () { return state.useSample; },
+        toast: function (m, w) { toast(m, w); }, download: download, csvCell: csvCell, stamp: stamp, prefix: function () { return prefix(); },
+        refresh: function () { render(); }
+      });
+    }
 
     $('dv-sample').addEventListener('change', function () { setSample(this.checked); });
     $('dv-empty-sample').addEventListener('click', function () { setSample(true); });
