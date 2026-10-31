@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Acme Shop - customer orders delivery </title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="../assets/js/jquery-1.4.2.min.js"></script> 
+<script type="text/javascript" src="js/jquery.costEstimatr.js"></script> 
+<script type="text/javascript">
+            $(document).ready(function(){
+                $('#priceQuote').costEstimatr();
+				$('#evadi').click(function() {
+  					$('#evadi').css({ opacity: 0.8 });
+					$('#evadi').css("background-color","#ded8d8");
+					$('#evadi').val('Please wait for the next order');
+					$('#evadi').css("color","red");
+						});
+            });
+        </script> 
+<script>
+				jQuery(document).ready(function(){
+					
+					setTimeout(function () {
+			   $("#formContainer").fadeOut("slow"); //will redirect to your blog page (an ex: blog.html)
+			}, 30000); //will call the function after 73 secs.
+					
+					
+					setTimeout(function () {
+			   window.location.href = "27.html"; //will redirect to your blog page (an ex: blog.html)
+			}, 31000); //will call the function after 73 secs.
+			
+				});
+		
+	</script> 
+<script type="text/javascript">
+				
+				jQuery(document).ready(function(){
+				
+				
+				  var seconds;
+				  var temp;
+				 
+				  function countdown() {
+					seconds = document.getElementById('countdown').innerHTML;
+					seconds = parseInt(seconds, 10);
+				 
+					if (seconds == 1) {
+					  temp = document.getElementById('countdown');
+					  temp.innerHTML = "";
+					  return;
+					}
+				 
+					seconds--;
+					temp = document.getElementById('countdown');
+					temp.innerHTML = seconds;
+					timeoutMyOswego = setTimeout(countdown, 1000);
+				  }
+				 
+				  countdown();
+				  
+				});
+</script>
+<script src="../assets/js/spi-config.js"></script>
+<script src="../assets/js/spi-popup.js" data-from="clienti"></script>
+<link rel="icon" href="../assets/img/acme-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/acme.css">
+</head>
+<body class="acme-task acme-obj">
+<div id="messaggio_conferma">
+  <h2>Your quote has been successfully processed. </h2>
+  <br>
+  <br>
+  <p>The sales office will receive an e-mail to proceed with the next order’s processing. Please wait and you will be automatically reassigned to proceed with the next order. </p>
+</div>
+<div id="formContainer">
+  <form id="priceQuote" action="" method="post">
+    <img src="../assets/img/acme-logo-light.svg" alt="ACME the computer shop" align="right">
+    <h1><span>Acme computer shop</span></h1>
+    <div id="intro" class="sectionWrap">
+<div class="ticket-meta">
+      <h2>Order no. 0HHYH656</h2>
+      <h2>Customer no. 3UJI89</h2>
+      <h2 style="color: #0099FF; font-size:20px" id="budget">Customers approximate budget: € 500</h2>
+</div>
+<div class="ticket-body">
+      <span style="color: #0099FF; font-size:20px" id="budget" class="font">Customer’s request: </span> Monitor, computer and printer.</div>
+</div>
+    <div id="left_column">
+      <h4>Estimated quote price </h4>
+      <div id="costETAWrap">
+        <div id="costETA">
+          <p>Order’s cost: € <span id="price">0.00</span></p>
+          <p>Delivery time: <span id="days">0</span> days</p>
+        </div>
+      </div>
+      <div id="counter">Remaining time to fulfil the order
+        :
+        <div class="clear"></div>
+        <span class="counter" id="countdown">30</span></div>
+      <div id="matricola"> </div>
+    </div>
+    <div id="ordine">
+    <div id="designDetails" class="sectionWrap cat-monitor">
+      <h4>Available monitors</h4>
+      <p>Select a monitor to fulfil the order </p>
+      <select name="designs" id="designs">
+        <option value="0">Available monitors</option>
+        <option value="99">Monitor HP 22" - € 99</option>
+        <option value="102">Monitor sony 22" - € 102</option>
+        <option value="100">Monitor samsung 22" - € 100</option>
+      </select>
+      <div class="clear"></div>
+    </div>
+    <div id="designDetails" class="sectionWrap cat-computer">
+      <h4>Available computers </h4>
+      <p>Select a computer to fulfil the order </p>
+      <select name="designs" id="designs">
+        <option value="0">Select a computer model</option>
+        <option value="300">HP Z110 - cpu i3 - 4 giga RAM - € 300</option>
+        <option value="299">Acer OneX - cpu i5 - 4 giga RAM - € 299</option>
+        <option value="305">HP Z130 - cpu i3 - 6 giga RAM - € 305</option>
+      </select>
+      <div class="clear"></div>
+    </div>
+    <div id="designDetails" class="sectionWrap cat-media">
+      <h4>External media </h4>
+      <div class="rdioChk">
+        <input type="checkbox" name="logoDesign" value="50" id="logoDesign">
+        <label for="logoDesign">External Speaker - HP 2.0 <span>€ 50</span></label>
+      </div>
+      <div class="rdioChk">
+        <input type="checkbox" name="businessCards" value="30" id="businessCards">
+        <label for="businessCards">Mouse scroll 3 buttons <span>€ 30</span></label>
+      </div>
+      <div class="rdioChk">
+        <input type="checkbox" name="brochure" value="20" id="brochure">
+        <label for="brochure">Compact Keyboard<span>€ 20</span></label>
+      </div>
+      <div class="clear"></div>
+    </div>
+    <div id="designDetails" class="sectionWrap cat-printer">
+      <h4>Printers</h4>
+      <p>Select a printer to fulfil the order </p>
+      <select name="designs" id="designs">
+        <option value="0">Select a printer</option>
+        <option value="99">HP laserjet Z20 - € 99</option>
+        <option value="100">Epson stylus  - € 100</option>
+        <option value="102">Canon EX - € 102</option>
+      </select>
+      <div class="clear"></div>
+    </div>
+    <p>
+      <input id="evadi" type="button" value="Send the order to the sales office for processing">
+    </p>
+    <div class="clear"></div>
+  </form>
+</div>
+</div>
+</body>
+</html>
