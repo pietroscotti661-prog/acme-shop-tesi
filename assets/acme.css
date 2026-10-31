@@ -1805,6 +1805,28 @@ body.acme-table table tbody tr:hover > td {
   background-color: var(--accent-wash);
 }
 
+/* narrow screens: the catalogue tables use fixed column widths in the HTML; let them shrink and wrap instead of running off the screen */
+@media (max-width: 900px) {
+  body.acme-table table {
+    table-layout: auto !important;
+  }
+
+  body.acme-table col {
+    width: auto !important;
+  }
+
+  body.acme-table table th,
+  body.acme-table table td {
+    padding: 8px 8px;
+    white-space: normal;
+  }
+
+  body.acme-table table td {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+}
+
 /* sortable column headers */
 body.acme-table table thead th {
   cursor: pointer;
