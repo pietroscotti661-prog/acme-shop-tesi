@@ -6,54 +6,138 @@
 <title>Acme shop</title>
 <link rel="icon" href="assets/img/acme-icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/acme.css">
+<script>
+  // Home only: progressive reveal on scroll. Without JS, or with reduced motion, everything is simply visible.
+  (function () {
+    try {
+      if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.className += ' home-reveal';
+      }
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body class="acme-home">
+<header class="home-top">
+  <a class="home-top-brand" href="index.html"><img src="assets/img/acme-logo.svg" alt="ACME the computer shop" width="152" height="40"></a>
+  <p class="home-top-label">Experimenter console</p>
+  <p class="home-status"><span class="home-status-dot" aria-hidden="true"></span>Experimental session <span class="home-status-sep">·</span> <span class="home-status-soft">offline</span></p>
+  <a class="home-db-btn" href="data.html">Database</a>
+</header>
+
 <main class="home">
-  <header class="home-hero">
-    <img src="assets/img/acme-logo-light.svg" alt="ACME the computer shop" class="home-logo">
-    <h1>AMCE computer shop</h1>
-    <p>Experimenter page. Choose the condition to start the simulation.</p>
-  </header>
+  <section class="home-hero" aria-labelledby="home-title">
+    <p class="home-eyebrow reveal">Thesis study <span>/</span> Small positive interactions at work</p>
+    <h1 id="home-title" class="reveal">ACME<br>computer shop</h1>
+    <p class="home-lede reveal">A simulated online computer shop for a study on objectifying work and small positive interactions with colleagues and customers. Each condition opens the participant view, from the instructions to the end page.</p>
 
-  <ul class="home-conditions">
-    <li class="home-card home-card--notobj">
-      <a href="not_obj_cond/acme_shop_1.html">
-        <span class="home-card-title">Start the Not-objectifying condition</span>
-        <span class="home-card-meta">16 customer tickets, no time limit. About 20 minutes.</span>
-      </a>
-    </li>
-    <li class="home-card home-card--obj">
-      <a href="obj_cond/acme_shop_2.html">
-        <span class="home-card-title">Start the Objectifying condition</span>
-        <span class="home-card-meta">33 timed orders, from 60 down to 30 seconds each. About 20 minutes.</span>
-      </a>
-    </li>
-    <li class="home-card home-card--obj">
-      <a href="obj_spi_colleghi/acme_shop_2.html">
-        <span class="home-card-title">Start the Objectifying + small positive interaction: colleagues</span>
-        <span class="home-card-meta">Same 33 timed orders, with 3 short videos from a colleague, each about 30 seconds before an order ends (orders 6, 15, 24).</span>
-      </a>
-    </li>
-    <li class="home-card home-card--obj">
-      <a href="obj_spi_clienti/acme_shop_2.html">
-        <span class="home-card-title">Start the Objectifying + small positive interaction: customers</span>
-        <span class="home-card-meta">Same 33 timed orders, with 3 short videos from a customer, each about 30 seconds before an order ends (orders 6, 15, 24).</span>
-      </a>
-    </li>
-    <li class="home-card home-card--obj">
-      <a href="obj_spi_test_cond/acme_shop_2.html">
-        <span class="home-card-title">Start the Objectifying + small positive interaction TEST version</span>
-        <span class="home-card-meta">Same 3 timed videos from a colleague or a customer (random), plus two buttons on the right to play one at any moment. To be removed.</span>
-      </a>
-    </li>
-    <li class="home-card home-card--control">
-      <a href="control/acme_shop_control.html">
-        <span class="home-card-title">Start the Control condition</span>
-        <span class="home-card-meta">Arkanoid beta test, 10 levels of 2 minutes. About 20 minutes.</span>
-      </a>
-    </li>
-  </ul>
+    <dl class="home-stats reveal">
+      <div><dt>Timed orders</dt><dd>33</dd></div>
+      <div><dt>Tickets</dt><dd>16</dd></div>
+      <div><dt>Game levels</dt><dd>10</dd></div>
+      <div><dt>SPI videos</dt><dd>3</dd></div>
+    </dl>
 
+    <div class="home-session reveal">
+      <p class="home-session-label">Session</p>
+      <p class="home-session-text">Every session takes about 20 minutes. Events stay in this browser: open the <a href="data.html">database</a> to read and export them.</p>
+    </div>
+
+  </section>
+
+  <section class="home-board" aria-labelledby="home-board-title">
+    <div class="home-board-head reveal">
+      <h2 id="home-board-title">Conditions <span>06</span></h2>
+      <p>Opens the participant view</p>
+    </div>
+
+    <ul class="home-conditions">
+      <li class="home-card home-card--notobj reveal">
+        <a href="not_obj_cond/acme_shop_1.html">
+          <span class="home-card-top"><span class="home-card-idx">C1</span><span class="home-card-tag">No timer</span></span>
+          <span class="home-card-title">Start the Not-objectifying condition</span>
+          <span class="home-card-meta">16 customer tickets, no time limit. About 20 minutes.</span>
+          <span class="home-card-go">Open</span>
+        </a>
+      </li>
+      <li class="home-card home-card--obj reveal">
+        <a href="obj_cond/acme_shop_2.html">
+          <span class="home-card-top"><span class="home-card-idx">C2</span><span class="home-card-tag">Timed</span></span>
+          <span class="home-card-title">Start the Objectifying condition</span>
+          <span class="home-card-meta">33 timed orders, from 60 down to 30 seconds each. About 20 minutes.</span>
+          <span class="home-card-go">Open</span>
+        </a>
+      </li>
+      <li class="home-card home-card--spi reveal">
+        <a href="obj_spi_colleghi/acme_shop_2.html">
+          <span class="home-card-top"><span class="home-card-idx">C3</span><span class="home-card-tag">Timed + video</span></span>
+          <span class="home-card-title">Start the Objectifying + small positive interaction: colleagues</span>
+          <span class="home-card-meta">Same 33 timed orders, with 3 short videos from a colleague, each about 30 seconds before an order ends (orders 6, 15, 24).</span>
+          <span class="home-card-go">Open</span>
+        </a>
+      </li>
+      <li class="home-card home-card--spi reveal">
+        <a href="obj_spi_clienti/acme_shop_2.html">
+          <span class="home-card-top"><span class="home-card-idx">C4</span><span class="home-card-tag">Timed + video</span></span>
+          <span class="home-card-title">Start the Objectifying + small positive interaction: customers</span>
+          <span class="home-card-meta">Same 33 timed orders, with 3 short videos from a customer, each about 30 seconds before an order ends (orders 6, 15, 24).</span>
+          <span class="home-card-go">Open</span>
+        </a>
+      </li>
+      <li class="home-card home-card--test reveal">
+        <a href="obj_spi_test_cond/acme_shop_2.html">
+          <span class="home-card-top"><span class="home-card-idx">C5</span><span class="home-card-tag home-card-tag--warn">Test only</span></span>
+          <span class="home-card-title">Start the Objectifying + small positive interaction TEST version</span>
+          <span class="home-card-meta">Same 3 timed videos from a colleague or a customer (random), plus two buttons in the side bar to play one at any moment. To be removed.</span>
+          <span class="home-card-go">Open</span>
+        </a>
+      </li>
+      <li class="home-card home-card--control reveal">
+        <a href="control/acme_shop_control.html">
+          <span class="home-card-top"><span class="home-card-idx">C6</span><span class="home-card-tag">Game</span></span>
+          <span class="home-card-title">Start the Control condition</span>
+          <span class="home-card-meta">Arkanoid beta test, 10 levels of 2 minutes. About 20 minutes.</span>
+          <span class="home-card-go">Open</span>
+        </a>
+      </li>
+      <li class="home-card home-card--data reveal">
+        <a href="data.html">
+          <span class="home-card-top"><span class="home-card-idx">DB</span><span class="home-card-tag">Experimenter</span></span>
+          <span class="home-card-title">Database</span>
+          <span class="home-card-meta">Sessions, timings and video events recorded in this browser. Search, open a session, export CSV or JSON, merge data from other computers.</span>
+          <span class="home-card-go">Open the data</span>
+        </a>
+      </li>
+    </ul>
+  </section>
 </main>
+
+<script>
+  // Home only: reveal blocks as they enter the screen, and a soft light that follows the pointer on the cards.
+  (function () {
+    var root = document.documentElement;
+    if (root.className.indexOf('home-reveal') !== -1) {
+      var items = document.querySelectorAll('.reveal');
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+        });
+      }, { rootMargin: '0px 0px -4% 0px', threshold: 0.05 });
+      Array.prototype.forEach.call(items, function (el, i) {
+        el.style.setProperty('--d', Math.min(i, 10) * 50 + 'ms');
+        io.observe(el);
+      });
+    }
+    var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!fine) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.home-card a'), function (a) {
+      a.addEventListener('pointermove', function (ev) {
+        var r = a.getBoundingClientRect();
+        a.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
+        a.style.setProperty('--my', (ev.clientY - r.top) + 'px');
+      });
+    });
+  })();
+</script>
 </body>
 </html>

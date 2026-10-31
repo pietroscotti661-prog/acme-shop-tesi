@@ -13,9 +13,6 @@ window.SPI = {
     { id: 'colleghi-2', from: 'colleghi', file: 'p2-colleghi-2.mp4', phase: 'middle' },
     { id: 'colleghi-3', from: 'colleghi', file: 'p2-colleghi-3.mp4', phase: ['middle', 'end'] },
     { id: 'colleghi-4', from: 'colleghi', file: 'p2-colleghi-4.mp4', phase: ['middle', 'end'] },
-    { id: 'clienti-1', from: 'clienti', file: 'p2-clienti-1.mp4', phase: 'any' },
-    { id: 'clienti-2', from: 'clienti', file: 'p2-clienti-2.mp4', phase: 'any' },
-    { id: 'clienti-3', from: 'clienti', file: 'p2-clienti-3.mp4', phase: 'any' },
     { id: 'clienti-4', from: 'clienti', file: 'p2-clienti-4.mp4', phase: 'any' }
   ]
 };

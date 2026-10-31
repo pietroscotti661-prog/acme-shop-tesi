@@ -46,8 +46,11 @@
     return clip;
   }
 
+  var current = null;
+
   function build(clip) {
     if (!clip) return false;
+    current = clip;
     box = document.createElement('div');
     box.className = 'spi-popup';
     box.setAttribute('role', 'status');
@@ -60,7 +63,10 @@
     video.src = videoBase + clip.file;
     video.load();
     var mine = box;
-    video.addEventListener('ended', function () { setTimeout(function () { close(mine); }, 800); });
+    video.addEventListener('ended', function () {
+      window.dispatchEvent(new CustomEvent('spi:ended', { detail: { clip: clip.id, completed: true } }));
+      setTimeout(function () { close(mine); }, 800);
+    });
     video.addEventListener('error', function () { close(mine); });
     return true;
   }
@@ -90,6 +96,7 @@
   function show() {
     place();
     box.className = 'spi-popup spi-in';
+    window.dispatchEvent(new CustomEvent('spi:shown', { detail: { clip: current.id, from: current.from, secondsLeft: secondsLeft() } }));
     var b = box, v = video;
     var p = v.play();
     if (p && p.catch) {

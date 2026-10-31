@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acme shop - study database</title>
+<link rel="icon" href="assets/img/acme-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/acme.css">
+</head>
+<body class="acme-data">
+<aside class="dv-rail" aria-label="Database navigation">
+  <a class="dv-brand" href="index.html"><img src="assets/img/acme-logo.svg" alt="ACME the computer shop" width="152" height="40"></a>
+  <p class="dv-rail-label">Study database</p>
+  <nav class="dv-nav">
+    <a href="#overview"><span>01</span>Overview</a>
+    <a href="#charts"><span>02</span>Charts</a>
+    <a href="#sessions"><span>03</span>Sessions</a>
+    <a href="#transfer"><span>04</span>Export and import</a>
+  </nav>
+  <div class="dv-source">
+    <p class="dv-mono-label">Source</p>
+    <p class="dv-source-name"><span class="dv-source-dot" aria-hidden="true"></span><span id="dv-source-name">This browser</span></p>
+    <p class="dv-source-meta" id="dv-source-meta">IndexedDB · acme-study · events</p>
+  </div>
+  <div class="dv-note">
+    <p class="dv-mono-label">Where the data live</p>
+    <p>The experiment saves its events only in the browser where the session runs, on that computer. Nothing is sent anywhere. Export the data from this page after each day of sessions, and import the files here to merge several computers.</p>
+  </div>
+  <a class="dv-back" href="index.html">Experimenter home</a>
+</aside>
+
+<main class="dv-main">
+  <div class="dv-banner" id="dv-sample-banner" hidden>
+    <strong>Sample data, not real data</strong>
+    <span>Generated on this page for a preview. Nothing is written to the database.</span>
+    <button type="button" id="dv-sample-off" class="dv-btn dv-btn--light">Back to real data</button>
+  </div>
+
+  <header class="dv-head">
+    <div class="dv-head-text">
+      <p class="dv-eyebrow">ACME study <span>/</span> local database</p>
+      <h1>Study data</h1>
+      <p class="dv-sub" id="dv-sub">Reading the database...</p>
+    </div>
+    <div class="dv-head-actions">
+      <label class="dv-switch">
+        <input type="checkbox" id="dv-sample">
+        <span class="dv-switch-track" aria-hidden="true"></span>
+        <span class="dv-switch-text">Sample data</span>
+      </label>
+      <button type="button" id="dv-refresh" class="dv-btn dv-btn--ghost dv-btn--refresh">Refresh</button>
+    </div>
+  </header>
+
+  <section class="dv-empty" id="dv-empty" hidden>
+    <div class="dv-empty-mark" aria-hidden="true"></div>
+    <h2 id="dv-empty-title">No data in this browser yet</h2>
+    <p id="dv-empty-text">Events appear here once a session has been run in this browser.</p>
+    <div class="dv-empty-actions">
+      <button type="button" id="dv-empty-sample" class="dv-btn">Show sample data</button>
+      <button type="button" id="dv-empty-import" class="dv-btn dv-btn--ghost">Import JSON</button>
+    </div>
+  </section>
+
+  <div id="dv-content" class="dv-content" hidden>
+    <section id="overview" class="dv-section" aria-labelledby="dv-overview-title">
+      <h2 class="dv-section-title" id="dv-overview-title"><span>01</span>Overview</h2>
+      <div class="dv-kpis" id="dv-kpis"></div>
+    </section>
+
+    <section id="charts" class="dv-section dv-charts" aria-labelledby="dv-charts-title">
+      <h2 class="dv-section-title" id="dv-charts-title"><span>02</span>Charts</h2>
+      <div class="dv-chart-grid">
+        <figure class="dv-panel dv-chart">
+          <figcaption>
+            <span class="dv-chart-title">Sessions per condition</span>
+            <span class="dv-legend"><i class="dv-key dv-key--all"></i>All <i class="dv-key dv-key--done"></i>Completed</span>
+          </figcaption>
+          <ul class="dv-bars" id="dv-cond-chart"></ul>
+        </figure>
+        <figure class="dv-panel dv-chart">
+          <figcaption>
+            <span class="dv-chart-title">Mean seconds per order <small>timed conditions, orders 1 to 33</small></span>
+            <span class="dv-legend"><i class="dv-key dv-key--on"></i>On page <i class="dv-key dv-key--sub"></i>To submit <i class="dv-key dv-key--limit"></i>Time limit <i class="dv-key dv-key--spi"></i>SPI order</span>
+          </figcaption>
+          <div class="dv-cols" id="dv-order-chart"></div>
+        </figure>
+      </div>
+    </section>
+
+    <section id="sessions" class="dv-section" aria-labelledby="dv-sessions-title">
+      <h2 class="dv-section-title" id="dv-sessions-title"><span>03</span>Sessions <small id="dv-count"></small></h2>
+      <div class="dv-panel dv-table-panel">
+        <div class="dv-toolbar">
+          <label class="dv-search">
+            <span class="dv-visually-hidden">Search sessions</span>
+            <input type="search" id="dv-search" placeholder="Search code, condition or date" autocomplete="off">
+          </label>
+          <label class="dv-select">
+            <span class="dv-visually-hidden">Condition</span>
+            <select id="dv-filter"><option value="">All conditions</option></select>
+          </label>
+          <p class="dv-toolbar-hint">Click a row to open the timeline</p>
+        </div>
+        <div class="dv-table-wrap">
+          <table class="dv-table" id="dv-table">
+            <thead>
+              <tr>
+                <th data-key="sid" scope="col"><button type="button">Code</button></th>
+                <th data-key="cond" scope="col"><button type="button">Condition</button></th>
+                <th data-key="start" scope="col"><button type="button">Start</button></th>
+                <th data-key="dur" scope="col"><button type="button">Duration</button></th>
+                <th data-key="pages" scope="col"><button type="button">Pages</button></th>
+                <th data-key="orders" scope="col"><button type="button">Reached</button></th>
+                <th data-key="videos" scope="col"><button type="button">Videos</button></th>
+                <th scope="col" class="dv-th-plain">Status</th>
+              </tr>
+            </thead>
+            <tbody id="dv-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section id="transfer" class="dv-section" aria-labelledby="dv-transfer-title">
+    <h2 class="dv-section-title" id="dv-transfer-title"><span>04</span>Export and import</h2>
+    <div class="dv-transfer">
+      <div class="dv-panel dv-tcard">
+        <p class="dv-mono-label">Export</p>
+        <p>Download what is on screen. CSV opens in Excel, SPSS or R. JSON keeps every detail and can be imported again.</p>
+        <div class="dv-tbtns">
+          <button type="button" class="dv-btn dv-btn--file" id="dv-exp-events">Events CSV <small>one row per event</small></button>
+          <button type="button" class="dv-btn dv-btn--file" id="dv-exp-sessions">Sessions CSV <small>one row per session</small></button>
+          <button type="button" class="dv-btn dv-btn--file" id="dv-exp-json">JSON <small>full backup</small></button>
+        </div>
+      </div>
+      <div class="dv-panel dv-tcard">
+        <p class="dv-mono-label">Import</p>
+        <p>Add a JSON export from another computer. Events already here are skipped, so the same file can be imported twice without duplicates.</p>
+        <div class="dv-tbtns">
+          <button type="button" class="dv-btn dv-btn--ghost" id="dv-import">Import JSON</button>
+        </div>
+      </div>
+      <div class="dv-panel dv-tcard dv-tcard--danger">
+        <p class="dv-mono-label">Delete</p>
+        <p>Remove every event stored in this browser. Export a JSON copy first: this cannot be undone.</p>
+        <div class="dv-tbtns">
+          <button type="button" class="dv-btn dv-btn--danger" id="dv-delete">Delete all data</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="dv-scrim" id="dv-scrim"></div>
+<aside class="dv-drawer" id="dv-drawer" aria-hidden="true" aria-labelledby="dv-d-code" role="dialog">
+  <header class="dv-d-head">
+    <div>
+      <p class="dv-mono-label">Session</p>
+      <h2 id="dv-d-code">-</h2>
+      <p class="dv-d-cond" id="dv-d-cond"></p>
+    </div>
+    <button type="button" class="dv-d-close" id="dv-d-close" aria-label="Close the session panel"></button>
+  </header>
+  <dl class="dv-d-meta" id="dv-d-meta"></dl>
+  <div class="dv-d-timeline">
+    <p class="dv-mono-label">Timeline <span id="dv-d-count"></span></p>
+    <ol class="dv-d-list" id="dv-d-list"></ol>
+  </div>
+</aside>
+
+<div class="dv-confirm" id="dv-confirm" aria-hidden="true">
+  <div class="dv-confirm-box" role="alertdialog" aria-labelledby="dv-confirm-title" aria-describedby="dv-confirm-text">
+    <h2 id="dv-confirm-title">Delete all data?</h2>
+    <p id="dv-confirm-text"></p>
+    <label class="dv-confirm-label" for="dv-confirm-input">Type DELETE to confirm</label>
+    <input type="text" id="dv-confirm-input" autocomplete="off" spellcheck="false">
+    <div class="dv-confirm-actions">
+      <button type="button" class="dv-btn dv-btn--ghost" id="dv-confirm-cancel">Cancel</button>
+      <button type="button" class="dv-btn dv-btn--danger" id="dv-confirm-ok" disabled>Delete everything</button>
+    </div>
+  </div>
+</div>
+
+<div class="dv-toast" id="dv-toast" role="status" aria-live="polite"></div>
+<input type="file" id="dv-file" accept=".json,application/json" hidden>
+<script src="assets/js/data-view.js"></script>
+</body>
+</html>
