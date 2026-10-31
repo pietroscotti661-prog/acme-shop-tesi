@@ -3972,21 +3972,27 @@ body.acme-data .dv-switch .dv-switch-text {
 
 /* Small positive interaction video pop-up (assets/js/spi-popup.js) */
 /* Where: the free area of the side rail, under the countdown, always the same spot and never over the task.
-   spi-popup.js sets top (countdown bottom + 14 px), left and width inline; on screens 1024 px and wider
-   left and width are pinned to the rail here, so the video lines up with the instruments above it.
-   The fade (opacity and transform, 0.5 s ease) is the stimulus: keep it identical across versions. */
-.spi-popup { position: fixed; left: 24px; top: 560px; width: 300px; z-index: 9999; background: var(--surface, #f8f6f1); border: 1px solid var(--ink, #16181d); border-radius: 2px; box-shadow: 0 30px 70px -24px rgba(22, 24, 29, .55), 0 2px 0 rgba(22, 24, 29, .08); overflow: hidden; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .5s ease, transform .5s ease; }
-.spi-popup.spi-in { opacity: 1; transform: none; }
+   spi-popup.js sets top (countdown bottom + 14 px), left, width and the video height cap (--spi-vmax) inline; on screens
+   1024 px and wider left and width are pinned to the rail here, so the video lines up with the instruments above it.
+   The video is a 4:5 portrait with the caption over its lower part, like a video call. The fade (opacity and
+   transform, 0.5 s ease) is the stimulus and a short ring pulse draws the eye; keep both identical across versions. */
+.spi-popup { position: fixed; left: 24px; top: 560px; width: 300px; z-index: 9999; background: var(--surface, #f8f6f1); border: 1px solid var(--ink, #16181d); border-radius: 12px; box-shadow: 0 18px 44px -16px rgba(22, 24, 29, .5); overflow: hidden; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .5s ease, transform .5s ease; }
+.spi-popup.spi-in { opacity: 1; transform: none; animation: spi-ring 1.3s ease-out .5s 2; }
 .spi-popup.spi-out { opacity: 0; transform: translateY(16px); }
-.spi-popup .spi-head { background: var(--ink, #16181d); color: var(--on-ink, #f8f6f1); font: 600 12px/1 "JetBrains Mono", Consolas, monospace; letter-spacing: .06em; text-transform: uppercase; padding: 0 12px; height: 40px; display: flex; align-items: center; gap: 10px; }
-.spi-popup .spi-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 0 3px rgba(61, 220, 132, .22); }
-.spi-popup video { display: block; width: 100%; height: auto; background: #000; }
+.spi-popup .spi-head { background: var(--surface, #f8f6f1); color: var(--ink, #16181d); font: 600 13.5px/1 "Instrument Sans", Arial, sans-serif; padding: 0 14px; height: 36px; display: flex; align-items: center; gap: 9px; }
+.spi-popup .spi-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #1f9d5c; box-shadow: 0 0 0 3px rgba(31, 157, 92, .22); }
+.spi-popup .spi-stage { position: relative; background: #000; }
+.spi-popup video { display: block; width: 100%; aspect-ratio: 4 / 5; max-height: var(--spi-vmax, 340px); object-fit: cover; object-position: 50% 18%; background: #000; }
+.spi-popup .spi-cap { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 26px 12px 12px; background: linear-gradient(to top, rgba(12, 14, 18, .88) 55%, rgba(12, 14, 18, 0)); color: #fff; font: 600 17px/1.32 "Instrument Sans", Arial, sans-serif; text-align: center; text-shadow: 0 1px 2px rgba(0, 0, 0, .5); }
+@keyframes spi-ring { 0% { box-shadow: 0 18px 44px -16px rgba(22, 24, 29, .5), 0 0 0 0 rgba(43, 59, 214, .5); } 100% { box-shadow: 0 18px 44px -16px rgba(22, 24, 29, .5), 0 0 0 16px rgba(43, 59, 214, 0); } }
+@media (prefers-reduced-motion: reduce) { .spi-popup.spi-in { animation: none; } }
 @media (min-width: 1024px) {
   body.acme-task .spi-popup { left: var(--rail-x, 24px) !important; width: calc(var(--rail, 300px) - 2 * var(--rail-x, 24px)) !important; }
 }
 @media (max-width: 1023px) {
   body.acme-task .spi-popup { top: auto !important; bottom: 16px; left: 16px !important; width: min(340px, calc(100vw - 32px)) !important; }
   body.acme-task:has(.spi-test-btn) .spi-popup { bottom: 82px; }
+  .spi-popup video { aspect-ratio: 1 / 1; object-position: 50% 6%; }
 }
 
 /* Test buttons of the small positive interaction test version: bottom of the side rail, side by side */

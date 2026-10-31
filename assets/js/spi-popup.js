@@ -56,7 +56,8 @@
     box.setAttribute('role', 'status');
     box.innerHTML =
       '<div class="spi-head"><span class="spi-dot"></span>' + title + '</div>' +
-      '<video playsinline preload="auto"></video>';
+      '<div class="spi-stage"><video playsinline preload="auto"></video><p class="spi-cap"></p></div>';
+    box.getElementsByClassName('spi-cap')[0].textContent = clip.text || '';
     document.body.appendChild(box);
 
     video = box.getElementsByTagName('video')[0];
@@ -77,20 +78,24 @@
   }
 
   // Fill the free area left of the task, under the countdown box (never over the task itself).
+  // The video is a 4:5 portrait; CSS caps its height (--spi-vmax) so the box always fits the screen.
   function place() {
     var counter = document.getElementById('counter');
     var task = document.getElementById('ordine');
     if (!counter || !task) return;
     var c = counter.getBoundingClientRect();
     var t = task.getBoundingClientRect();
-    var head = 40, gap = 14, margin = 16;
+    var head = 36, gap = 14, margin = 16;
     var top = c.bottom + gap;
     var areaW = t.left - margin - margin;
-    var fitW = (window.innerHeight - top - margin - head) * (16 / 9);
-    var width = Math.max(200, Math.min(areaW, fitW));
+    var width = Math.max(200, Math.min(areaW, 400));
     box.style.left = (margin + (areaW - width) / 2) + 'px';
     box.style.top = top + 'px';
     box.style.width = width + 'px';
+    var wide = window.innerWidth >= 1024;
+    box.style.setProperty('--spi-vmax', Math.max(150, wide ? window.innerHeight - top - margin - head : window.innerHeight * 0.42) + 'px');
+    var w = box.getBoundingClientRect().width || width;
+    box.getElementsByClassName('spi-cap')[0].style.fontSize = Math.max(14, Math.round(w * 0.062)) + 'px';
   }
 
   function show() {
