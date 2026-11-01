@@ -105,7 +105,7 @@
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   /* layout */
-  --rail: clamp(288px, 22vw, 420px);  /* side rail on screens 1024 px and wider */
+  --rail: clamp(280px, 28vw, 420px);  /* side rail on screens 900 px and wider */
   --rail-x: 24px;                     /* inner padding of the rail */
   --main-w: 1080px;                   /* max width of the work area */
 
@@ -1994,7 +1994,7 @@ body.acme-game #instructions b {
  * Non-objectifying: the tools menu becomes the rail navigation, the cost readout sits under it.
  */
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   body:has(img[align="right"]) {
     padding: 36px 44px 64px calc(var(--rail) + 44px);
   }
@@ -2159,7 +2159,7 @@ body.acme-game #instructions b {
 }
 
 /* small laptops: keep the rail compact */
-@media (min-width: 1024px) and (max-width: 1279px) {
+@media (min-width: 900px) and (max-width: 1279px) {
   #ordine .sectionWrap {
     grid-template-columns: 200px minmax(0, 1fr);
     column-gap: 20px;
@@ -2172,7 +2172,7 @@ body.acme-game #instructions b {
 
 /* ---------- Narrow screens ---------- */
 
-@media (max-width: 1023px) {
+@media (max-width: 899px) {
   .ticket-meta {
     border-bottom: 0;
   }
@@ -4413,13 +4413,19 @@ body.acme-data .dv-switch .dv-switch-text {
 .spi-popup .spi-cap { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 26px 12px 12px; background: linear-gradient(to top, rgba(12, 14, 18, .88) 55%, rgba(12, 14, 18, 0)); color: #fff; font: 600 17px/1.32 "Instrument Sans", Arial, sans-serif; text-align: center; text-shadow: 0 1px 2px rgba(0, 0, 0, .5); }
 @keyframes spi-ring { 0% { box-shadow: 0 18px 44px -16px rgba(22, 24, 29, .5), 0 0 0 0 rgba(43, 59, 214, .5); } 100% { box-shadow: 0 18px 44px -16px rgba(22, 24, 29, .5), 0 0 0 16px rgba(43, 59, 214, 0); } }
 @media (prefers-reduced-motion: reduce) { .spi-popup.spi-in { animation: none; } }
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   body.acme-task .spi-popup { left: var(--rail-x, 24px) !important; width: calc(var(--rail, 300px) - 2 * var(--rail-x, 24px)) !important; }
 }
-@media (max-width: 1023px) {
-  body.acme-task .spi-popup { top: auto !important; bottom: 16px; left: 16px !important; width: min(340px, calc(100vw - 32px)) !important; }
-  body.acme-task:has(.spi-test-btn) .spi-popup { bottom: 82px; }
-  .spi-popup video { aspect-ratio: 1 / 1; object-position: 50% 6%; }
+@media (max-width: 899px) {
+  /* narrow window: the video is a slim bar docked at the bottom, and the page gets the same room at its end,
+     so nothing of the order is hidden for good (scroll the page and everything stays reachable) */
+  body.acme-task .spi-popup { top: auto !important; bottom: 0; left: 0 !important; right: 0; width: auto !important; border-width: 1px 0 0; border-radius: 12px 12px 0 0; }
+  body.acme-task .spi-popup .spi-head { height: 28px; font-size: 12.5px; }
+  body.acme-task .spi-popup .spi-stage { display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: center; background: var(--surface, #f8f6f1); }
+  body.acme-task .spi-popup video { width: 112px; height: 140px; max-height: none; aspect-ratio: auto; object-position: 50% 12%; }
+  body.acme-task .spi-popup .spi-cap { position: static; padding: 8px 16px; background: none; color: var(--ink, #16181d); font-size: 15px !important; line-height: 1.35; text-align: left; text-shadow: none; }
+  body.acme-task:has(.spi-popup) { padding-bottom: 184px; }
+  body:has(.spi-popup) .spi-test-btn { bottom: 196px; }
 }
 
 /* Test buttons of the small positive interaction test version: bottom of the side rail, side by side */
@@ -4430,4 +4436,8 @@ body.acme-data .dv-switch .dv-switch-text {
 @media (hover: hover) and (pointer: fine) { .spi-test-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 22px -12px rgba(22, 24, 29, .38); } }
 .spi-test-btn:active { transform: translateY(0) scale(.99); }
 .spi-test-btn:focus-visible { outline: 2px solid var(--accent, #2b3bd6); outline-offset: 3px; }
-@media (max-width: 1023px) { .spi-test-btn { left: auto; right: 16px; bottom: 16px; width: 150px; } .spi-test-btn ~ .spi-test-btn { left: auto; right: 174px; } }
+@media (max-width: 899px) { .spi-test-btn { left: auto; right: 16px; bottom: 16px; width: 150px; } .spi-test-btn ~ .spi-test-btn { left: auto; right: 174px; } }
+
+/* ---------- Objectifying orders: after "Send the order", the fields are locked ---------- */
+body.acme-sent #ordine { pointer-events: none; user-select: none; }
+body.acme-sent #evadi { pointer-events: none; cursor: default; }

@@ -92,7 +92,7 @@
     box.style.left = (margin + (areaW - width) / 2) + 'px';
     box.style.top = top + 'px';
     box.style.width = width + 'px';
-    var wide = window.innerWidth >= 1024;
+    var wide = window.innerWidth >= 900;
     box.style.setProperty('--spi-vmax', Math.max(150, wide ? window.innerHeight - top - margin - head : window.innerHeight * 0.42) + 'px');
     var w = box.getBoundingClientRect().width || width;
     box.getElementsByClassName('spi-cap')[0].style.fontSize = Math.max(14, Math.round(w * 0.062)) + 'px';
