@@ -3970,6 +3970,422 @@ body.acme-data .dv-switch .dv-switch-text {
   }
 }
 
+/* ---------- data page: questionnaire study ---------- */
+
+.dv-st {
+  padding: 0;
+}
+
+.dv-st-scope {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--surface-2);
+}
+
+.dv-st-count {
+  margin-left: auto;
+  color: var(--muted);
+  font: 500 12px/1.4 var(--mono);
+}
+
+.dv-st-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 4px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--ink);
+  background: var(--surface);
+}
+
+.dv-st-tab {
+  margin-bottom: -1px;
+  padding: 13px 14px 12px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--ink-2);
+  font: 600 14px/1.2 var(--font);
+  cursor: pointer;
+}
+
+.dv-st-tab:hover {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+
+.dv-st-tab.is-on {
+  border-bottom-color: var(--accent);
+  color: var(--ink);
+}
+
+.dv-st-tab:focus-visible {
+  outline: 3px solid var(--accent-ring);
+  outline-offset: -3px;
+}
+
+.dv-st-body {
+  padding: 24px;
+}
+
+.dv-st-label {
+  margin: 26px 0 10px;
+}
+
+.dv-st-label:first-child {
+  margin-top: 0;
+}
+
+.dv-st-note {
+  max-width: 82ch;
+  margin: 8px 0;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.dv-st-warn {
+  max-width: 82ch;
+  margin: 12px 0;
+  padding: 10px 14px;
+  border: 1px solid var(--ochre-line);
+  background: var(--ochre-wash);
+  color: var(--ochre-ink);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.dv-st-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 16px;
+  margin: 14px 0;
+}
+
+.dv-st-field {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  font-size: 13px;
+}
+
+.dv-st-field > span {
+  color: var(--muted);
+  font: 500 11.5px/1.3 var(--mono);
+}
+
+.dv-st-field--wide {
+  flex: 1 1 280px;
+}
+
+.dv-st-in,
+.dv-st-field select,
+.dv-st-text {
+  padding: 9px 11px;
+  border: 1px solid var(--line-ctl);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: 14px/1.4 var(--font);
+}
+
+.dv-st-in--n {
+  width: 5.5em;
+}
+
+.dv-st-in--title {
+  min-width: 14em;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.dv-st-in:hover,
+.dv-st-field select:hover,
+.dv-st-text:hover {
+  border-color: var(--ink);
+}
+
+.dv-st-in:focus-visible,
+.dv-st-field select:focus-visible,
+.dv-st-text:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+  outline: none;
+}
+
+.dv-st-text {
+  display: block;
+  width: 100%;
+  max-width: 90ch;
+  font: 14.5px/1.6 var(--font);
+  resize: vertical;
+}
+
+.dv-st-chip {
+  padding: 4px 10px;
+  border: 1px solid var(--accent-line);
+  background: var(--accent-wash);
+  color: var(--accent-deep);
+  font: 600 12px/1.4 var(--mono);
+  cursor: pointer;
+}
+
+.dv-st-chip:hover {
+  border-color: var(--accent);
+}
+
+.dv-st-bar {
+  display: inline-block;
+  vertical-align: middle;
+  width: 120px;
+  height: 10px;
+  border: 1px solid var(--line-ctl);
+  background: var(--surface-2);
+}
+
+.dv-st-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.dv-st-bar.is-warn > span {
+  background: var(--signal);
+}
+
+.dv-st-total td {
+  border-top: 1px solid var(--ink);
+  background: var(--surface-2);
+}
+
+.dv-st-sigrow td {
+  background: var(--accent-wash);
+}
+
+.dv-st-card {
+  margin: 18px 0;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.dv-st-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+}
+
+.dv-st-edit {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface-2);
+}
+
+.dv-st-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 6px 14px;
+  margin: 10px 0 14px;
+}
+
+.dv-st-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--line-soft);
+  background: var(--surface);
+  font-size: 13.5px;
+}
+
+.dv-st-rev {
+  color: var(--muted);
+  font: 600 11px var(--mono);
+}
+
+.dv-st-pick {
+  position: relative;
+  border: 1px solid var(--line-ctl);
+  background: var(--surface);
+}
+
+.dv-st-pick > summary {
+  padding: 9px 12px;
+  font: 600 14px/1.4 var(--font);
+  cursor: pointer;
+}
+
+.dv-st-pick[open] {
+  min-width: min(560px, 100%);
+}
+
+.dv-st-pickgroup {
+  padding: 8px 12px 10px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.dv-st-pickgroup .dv-an-check {
+  display: flex;
+  margin: 4px 0;
+  font-size: 13.5px;
+}
+
+.dv-st-matrix {
+  width: auto;
+  min-width: 0;
+}
+
+.dv-st-matrix th,
+.dv-st-matrix td {
+  padding: 8px 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.dv-st-rowh {
+  position: sticky;
+  left: 0;
+  max-width: 22em;
+  overflow: hidden;
+  text-align: left !important;
+  text-overflow: ellipsis;
+  background: var(--surface);
+  font-weight: 600;
+}
+
+.dv-st-col {
+  font: 600 12px var(--mono);
+}
+
+.dv-st-cell {
+  min-width: 4.4em;
+  border: 1px solid var(--surface);
+  font: 600 13px var(--mono);
+  cursor: pointer;
+}
+
+.dv-st-cell sup {
+  margin-left: 2px;
+  font-size: 10px;
+}
+
+.dv-st-cell.is-sig {
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+
+.dv-st-cell.is-pick {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.dv-st-cell:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.dv-st-diag,
+.dv-st-na {
+  color: var(--muted);
+  background: var(--surface-2);
+  font: 12px var(--mono);
+}
+
+.dv-st-pt {
+  fill: var(--accent);
+  fill-opacity: 0.55;
+  stroke: var(--surface);
+  stroke-width: 1;
+}
+
+.dv-st-fit {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.dv-st-slope {
+  stroke: var(--accent);
+  stroke-width: 2.2;
+}
+
+.dv-st-two {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px 28px;
+  margin-top: 8px;
+}
+
+.dv-st-dd {
+  margin: 10px 0;
+  font-size: 13px;
+}
+
+.dv-st-dd summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dv-st-flags {
+  margin: 12px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+}
+
+.dv-d-study {
+  padding: 0 24px 6px;
+}
+
+@media (min-width: 1100px) {
+  .dv-st-two {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .dv-st-scope,
+  .dv-st-body {
+    padding: 16px;
+  }
+
+  .dv-st-tabs {
+    padding: 0 8px;
+  }
+
+  .dv-st-count {
+    margin-left: 0;
+  }
+}
+
+.dv-st-hint {
+  display: block;
+  margin: 3px 0 0 26px;
+  max-width: 70ch;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.dv-an-table td:last-child .dv-dim {
+  display: inline-block;
+  min-width: 17ch;
+  overflow-wrap: anywhere;
+}
+
+.dv-st-body .dv-an-plot {
+  max-width: 680px;
+}
+
 /* Small positive interaction video pop-up (assets/js/spi-popup.js) */
 /* Where: the free area of the side rail, under the countdown, always the same spot and never over the task.
    spi-popup.js sets top (countdown bottom + 14 px), left, width and the video height cap (--spi-vmax) inline; on screens

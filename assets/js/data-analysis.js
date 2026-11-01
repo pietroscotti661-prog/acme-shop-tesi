@@ -108,6 +108,7 @@
   }
 
   function outcomeColumns() {
+    if (window.ACME_STUDY) return window.ACME_STUDY.analysisColumns();   // scale scores and questionnaire columns, built by data-study.js
     if (host.isSample()) return sampleOutcomes();
     var o = st.outcomes;
     if (!o || !o.idCol && o.idCol !== 0) return [];
@@ -178,6 +179,7 @@
     var G = groupings()[st.group], by = {};
     host.sessions().forEach(function (s) {
       if (st.doneOnly && !s.finished) return;
+      if (window.ACME_STUDY && window.ACME_STUDY.isExcluded(s)) return;   // exclusion rules of the Questionnaire study section
       var k = G.fn(s);
       if (k == null) return;
       var v = valueOf(metric, s);
@@ -374,7 +376,8 @@
     host.sessions().forEach(function (s) { ids[s.sid.toLowerCase()] = 1; });
     var idx = o.headers.indexOf(o.idCol), matched = 0;
     if (idx >= 0) o.rows.forEach(function (r) { if (ids[(r[idx] || '').trim().toLowerCase()]) matched++; });
-    meta.textContent = (o.name || 'questionnaire.csv') + ': ' + o.rows.length + ' rows, ' + (idx >= 0 ? matched + ' matched to a session code, ' : 'choose the ID column, ') + cols.length + ' numeric columns found.';
+    var usable = window.ACME_STUDY && window.ACME_STUDY.state.M && window.ACME_STUDY.state.M.T && window.ACME_STUDY.state.M.T.idx >= 0 ? window.ACME_STUDY.state.M.T.rows.length : o.rows.length;   // Qualtrics header rows and duplicates left out
+    meta.textContent = (o.name || 'questionnaire.csv') + ': ' + usable + ' rows, ' + (idx >= 0 ? matched + ' matched to a session code, ' : 'choose the ID column, ') + cols.length + ' numeric columns found.';
   }
 
   function render() {
@@ -480,5 +483,5 @@
     $('dv-an-q-clear').addEventListener('click', function () { st.outcomes = null; saveOutcomes(); render(); host.toast('Questionnaire removed from this browser.'); });
   }
 
-  window.ACME_ANALYSIS = { init: init, render: render, state: st, parseCsv: parseCsv };
+  window.ACME_ANALYSIS = { init: init, render: render, state: st, parseCsv: parseCsv, taskMetrics: function () { return METRICS; }, valueOf: valueOf };
 })();

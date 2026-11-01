@@ -15,8 +15,9 @@
     <a href="#overview"><span>01</span>Overview</a>
     <a href="#charts"><span>02</span>Charts</a>
     <a href="#analysis"><span>03</span>Analysis</a>
-    <a href="#sessions"><span>04</span>Sessions</a>
-    <a href="#transfer"><span>05</span>Export and import</a>
+    <a href="#study"><span>04</span>Questionnaire study</a>
+    <a href="#sessions"><span>05</span>Sessions</a>
+    <a href="#transfer"><span>06</span>Export and import</a>
   </nav>
   <div class="dv-source">
     <p class="dv-mono-label">Source</p>
@@ -114,8 +115,17 @@
       </div>
     </section>
 
+    <section id="study" class="dv-section" aria-labelledby="dv-study-title">
+      <h2 class="dv-section-title" id="dv-study-title"><span>04</span>Questionnaire study</h2>
+      <div class="dv-panel dv-st">
+        <div class="dv-st-scope" id="dv-st-scope"></div>
+        <div class="dv-st-tabs" id="dv-st-tabs" role="tablist" aria-label="Questionnaire study tools"></div>
+        <div class="dv-st-body" id="dv-st-body"></div>
+      </div>
+    </section>
+
     <section id="sessions" class="dv-section" aria-labelledby="dv-sessions-title">
-      <h2 class="dv-section-title" id="dv-sessions-title"><span>04</span>Sessions <small id="dv-count"></small></h2>
+      <h2 class="dv-section-title" id="dv-sessions-title"><span>05</span>Sessions <small id="dv-count"></small></h2>
       <div class="dv-panel dv-table-panel">
         <div class="dv-toolbar">
           <label class="dv-search">
@@ -150,7 +160,7 @@
   </div>
 
   <section id="transfer" class="dv-section" aria-labelledby="dv-transfer-title">
-    <h2 class="dv-section-title" id="dv-transfer-title"><span>05</span>Export and import</h2>
+    <h2 class="dv-section-title" id="dv-transfer-title"><span>06</span>Export and import</h2>
     <div class="dv-transfer">
       <div class="dv-panel dv-tcard">
         <p class="dv-mono-label">Export</p>
@@ -190,6 +200,7 @@
     <button type="button" class="dv-d-close" id="dv-d-close" aria-label="Close the session panel"></button>
   </header>
   <dl class="dv-d-meta" id="dv-d-meta"></dl>
+  <div id="dv-d-study"></div>
   <div class="dv-d-timeline">
     <p class="dv-mono-label">Timeline <span id="dv-d-count"></span></p>
     <ol class="dv-d-list" id="dv-d-list"></ol>
@@ -213,6 +224,7 @@
 <input type="file" id="dv-file" accept=".json,application/json" hidden>
 <script src="assets/js/data-stats.js"></script>
 <script src="assets/js/data-analysis.js"></script>
+<script src="assets/js/data-study.js"></script>
 <script src="assets/js/data-view.js"></script>
 </body>
 </html>

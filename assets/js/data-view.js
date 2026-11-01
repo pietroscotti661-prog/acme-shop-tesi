@@ -350,6 +350,7 @@
     renderOrderChart();
     renderFilters();
     renderTable();
+    if (window.ACME_STUDY) window.ACME_STUDY.refresh();       // builds the exclusions and scale scores the analysis uses
     if (window.ACME_ANALYSIS) window.ACME_ANALYSIS.render();
     if (state.openSid) openDrawer(state.openSid);
   }
@@ -510,6 +511,7 @@
         '</span></li>';
     }).join('');
     $('dv-d-count').textContent = s.events.length + ' events';
+    $('dv-d-study').innerHTML = window.ACME_STUDY ? window.ACME_STUDY.drawerHtml(s) : '';
     var d = $('dv-drawer');
     var wasOpen = d.classList.contains('is-open');
     d.classList.add('is-open');
@@ -658,14 +660,14 @@
 
   function init() {
     state.idb = idbAvailable();
-    if (window.ACME_ANALYSIS) {
-      window.ACME_ANALYSIS.init({
-        COND: COND, TIMED: TIMED, stepOf: stepOf, isTimedOrder: isTimedOrder, esc: esc,
-        sessions: function () { return state.sessions; }, isSample: function () { return state.useSample; },
-        toast: function (m, w) { toast(m, w); }, download: download, csvCell: csvCell, stamp: stamp, prefix: function () { return prefix(); },
-        refresh: function () { render(); }
-      });
-    }
+    var hostApi = {
+      COND: COND, TIMED: TIMED, stepOf: stepOf, isTimedOrder: isTimedOrder, esc: esc,
+      sessions: function () { return state.sessions; }, isSample: function () { return state.useSample; },
+      toast: function (m, w) { toast(m, w); }, download: download, csvCell: csvCell, stamp: stamp, prefix: function () { return prefix(); },
+      refresh: function () { render(); }
+    };
+    if (window.ACME_ANALYSIS) window.ACME_ANALYSIS.init(hostApi);
+    if (window.ACME_STUDY && window.ACME_ANALYSIS) window.ACME_STUDY.init(hostApi, window.ACME_ANALYSIS);
 
     $('dv-sample').addEventListener('change', function () { setSample(this.checked); });
     $('dv-empty-sample').addEventListener('click', function () { setSample(true); });

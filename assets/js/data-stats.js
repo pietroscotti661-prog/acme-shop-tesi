@@ -3,7 +3,9 @@
    continued fraction forms (Numerical Recipes); they are checked against SciPy in the project notes.
    Tests: Welch t, Mann-Whitney U, one-way ANOVA (classic and Welch), Kruskal-Wallis, Brown-Forsythe,
    chi-square test of independence, Holm correction. Effect sizes: Hedges g, eta squared, omega squared,
-   epsilon squared, rank-biserial r, Cramer's V. */
+   epsilon squared, rank-biserial r, Cramer's V.
+   For the correlational study: Pearson and Spearman correlation (Fisher CI), skewness and kurtosis, Cronbach's alpha,
+   McDonald's omega (one factor, principal axis), ordinary least squares, VIF, Benjamini-Hochberg, power for correlations. */
 (function (root) {
   'use strict';
 
@@ -282,12 +284,216 @@
   // n per group for a two-sided two-sample t test, alpha .05, power .80 (normal approximation)
   function nPerGroup(d) { return Math.ceil(2 * Math.pow(1.959964 + 0.841621, 2) / (d * d) + 0.96); }
 
+  /* ---------- correlation-study tools ---------- */
+
+  function normCdf(z) { return z >= 0 ? 1 - 0.5 * pZ2(z) : 0.5 * pZ2(z); }
+
+  // inverse of the normal cdf: Acklam's rational approximation plus one Halley step
+  function normInv(p) {
+    if (!(p > 0 && p < 1)) return p === 0 ? -Infinity : p === 1 ? Infinity : NaN;
+    var a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+    var b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
+    var c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+    var d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
+    var x, q, r;
+    if (p < 0.02425) { q = Math.sqrt(-2 * Math.log(p)); x = (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    else if (p > 1 - 0.02425) { q = Math.sqrt(-2 * Math.log(1 - p)); x = -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    else { q = p - 0.5; r = q * q; x = (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1); }
+    var e = normCdf(x) - p, u = e * Math.sqrt(2 * Math.PI) * Math.exp(x * x / 2);
+    return x - u / (1 + x * u / 2);
+  }
+
+  // Benjamini-Hochberg false discovery rate (adjusted p-values)
+  function bh(ps) {
+    var m = ps.length, idx = ps.map(function (p, i) { return i; }).sort(function (a, b) { return ps[b] - ps[a]; });
+    var out = new Array(m), run = 1;
+    idx.forEach(function (i, k) { var rank = m - k; run = Math.min(run, ps[i] * m / rank); out[i] = Math.min(1, run); });
+    return out;
+  }
+
+  function skew(a) {   // sample skewness G1 (as SPSS and scipy bias=False)
+    var n = a.length;
+    if (n < 3) return NaN;
+    var m = mean(a), s = sd(a), t = 0;
+    if (!(s > 0)) return NaN;
+    for (var i = 0; i < n; i++) t += Math.pow((a[i] - m) / s, 3);
+    return n / ((n - 1) * (n - 2)) * t;
+  }
+
+  function kurtosis(a) {   // sample excess kurtosis G2
+    var n = a.length;
+    if (n < 4) return NaN;
+    var m = mean(a), s = sd(a), t = 0;
+    if (!(s > 0)) return NaN;
+    for (var i = 0; i < n; i++) t += Math.pow((a[i] - m) / s, 4);
+    return n * (n + 1) / ((n - 1) * (n - 2) * (n - 3)) * t - 3 * (n - 1) * (n - 1) / ((n - 2) * (n - 3));
+  }
+
+  // Pearson r with t test and Fisher 95% CI. x and y: equal-length arrays, no missing values.
+  function pearson(x, y) {
+    var n = x.length;
+    if (n < 3) return { r: NaN, n: n, p: NaN, ciLo: NaN, ciHi: NaN, df: n - 2 };
+    var mx = mean(x), my = mean(y), sxy = 0, sxx = 0, syy = 0;
+    for (var i = 0; i < n; i++) { var dx = x[i] - mx, dy = y[i] - my; sxy += dx * dy; sxx += dx * dx; syy += dy * dy; }
+    var tx = 1e-18 * (mx * mx + 1e-12), ty = 1e-18 * (my * my + 1e-12);   // a value that varies only by rounding noise has no spread
+    if (!(sxx / n > tx && syy / n > ty)) return { r: NaN, n: n, p: NaN, ciLo: NaN, ciHi: NaN, df: n - 2, degenerate: true };
+    var r = Math.max(-1, Math.min(1, sxy / Math.sqrt(sxx * syy))), df = n - 2;
+    var p = Math.abs(r) >= 1 ? 0 : pT2(r * Math.sqrt(df / (1 - r * r)), df);
+    var lo = NaN, hi = NaN;
+    if (n > 3 && Math.abs(r) < 1) { var z = Math.atanh(r), h = 1.959964 / Math.sqrt(n - 3); lo = Math.tanh(z - h); hi = Math.tanh(z + h); }
+    return { r: r, n: n, p: p, ciLo: lo, ciHi: hi, df: df };
+  }
+
+  function spearman(x, y) {
+    if (x.length < 3) return { r: NaN, n: x.length, p: NaN, ciLo: NaN, ciHi: NaN, df: x.length - 2 };
+    return pearson(ranks(x).r, ranks(y).r);
+  }
+
+  // slope, intercept and r of a simple regression line (for scatter plots)
+  function line(x, y) {
+    var mx = mean(x), my = mean(y), sxy = 0, sxx = 0;
+    for (var i = 0; i < x.length; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) * (x[i] - mx); }
+    var b = sxx > 0 ? sxy / sxx : NaN;
+    return { b: b, a: my - b * mx };
+  }
+
+  function corrMatrix(cols) {   // cols: array of arrays (complete cases), returns k x k Pearson matrix
+    var k = cols.length, R = [];
+    for (var i = 0; i < k; i++) { R.push([]); for (var j = 0; j < k; j++) R[i].push(i === j ? 1 : NaN); }
+    for (i = 0; i < k; i++) for (j = i + 1; j < k; j++) { R[i][j] = R[j][i] = pearson(cols[i], cols[j]).r; }
+    return R;
+  }
+
+  // Cronbach's alpha. rows: array of participants, each an array of k item scores (complete cases only).
+  function cronbach(rows) {
+    var n = rows.length, k = n ? rows[0].length : 0;
+    if (n < 3 || k < 2) return { alpha: NaN, n: n, k: k, items: [] };
+    var cols = [], i, j;
+    for (j = 0; j < k; j++) cols.push(rows.map(function (r) { return r[j]; }));
+    var tot = rows.map(function (r) { return sum(r); });
+    function alphaOf(c) {
+      var kk = c.length, vs = 0, t = [];
+      for (var q = 0; q < n; q++) { var s = 0; for (var w = 0; w < kk; w++) s += c[w][q]; t.push(s); }
+      for (var w2 = 0; w2 < kk; w2++) vs += variance(c[w2]);
+      var vt = variance(t);
+      return vt > 0 ? kk / (kk - 1) * (1 - vs / vt) : NaN;
+    }
+    var R = corrMatrix(cols), rs = 0, cnt = 0;
+    for (i = 0; i < k; i++) for (j = i + 1; j < k; j++) if (isFinite(R[i][j])) { rs += R[i][j]; cnt++; }
+    var rbar = cnt ? rs / cnt : NaN;
+    var items = cols.map(function (c, idx) {
+      var others = rows.map(function (r, q) { return tot[q] - r[idx]; });
+      var rest = cols.filter(function (cc, w) { return w !== idx; });
+      return { mean: mean(c), sd: sd(c), rDrop: pearson(c, others).r, alphaDrop: k > 2 ? alphaOf(rest) : NaN };
+    });
+    return { alpha: alphaOf(cols), alphaStd: isFinite(rbar) ? k * rbar / (1 + (k - 1) * rbar) : NaN, rbar: rbar, n: n, k: k, items: items };
+  }
+
+  // McDonald's omega (total) from a one-factor solution (iterated principal axis). rows as in cronbach().
+  function omega(rows) {
+    var n = rows.length, k = n ? rows[0].length : 0;
+    if (n < 5 || k < 3) return NaN;
+    var cols = [], i, j;
+    for (j = 0; j < k; j++) cols.push(rows.map(function (r) { return r[j]; }));
+    var R = corrMatrix(cols);
+    for (i = 0; i < k; i++) for (j = 0; j < k; j++) if (!isFinite(R[i][j])) return NaN;
+    var h = R.map(function (row, a) { var m = 0; row.forEach(function (v, b) { if (a !== b) m = Math.max(m, Math.abs(v)); }); return m; });
+    var lam = new Array(k).fill(0), it, v;
+    for (it = 0; it < 500; it++) {
+      var M = R.map(function (row, a) { return row.map(function (x, b) { return a === b ? h[a] : x; }); });
+      v = new Array(k).fill(1 / Math.sqrt(k));
+      var ev = 0;
+      for (var p = 0; p < 300; p++) {      // power iteration on M + shift, so the largest eigenvalue is the dominant one
+        var w = new Array(k).fill(0);
+        for (i = 0; i < k; i++) { for (j = 0; j < k; j++) w[i] += M[i][j] * v[j]; w[i] += k * v[i]; }
+        var nm = Math.sqrt(sum(w.map(function (z) { return z * z; })));
+        if (!(nm > 0)) return NaN;
+        var nv = w.map(function (z) { return z / nm; }), dd = 0;
+        for (i = 0; i < k; i++) dd = Math.max(dd, Math.abs(nv[i] - v[i]));
+        v = nv; ev = nm - k;
+        if (dd < 1e-13) break;
+      }
+      if (!(ev > 0)) return NaN;
+      var sgn = sum(v) < 0 ? -1 : 1, change = 0;
+      for (i = 0; i < k; i++) { lam[i] = sgn * v[i] * Math.sqrt(ev); var nh = Math.min(0.9999, lam[i] * lam[i]); change = Math.max(change, Math.abs(nh - h[i])); h[i] = nh; }
+      if (change < 1e-10) break;
+    }
+    var sl = sum(lam), uniq = 0;
+    for (i = 0; i < k; i++) uniq += 1 - lam[i] * lam[i];
+    return sl * sl / (sl * sl + uniq);
+  }
+
+  /* ---------- linear algebra and ordinary least squares ---------- */
+
+  function invert(A) {   // Gauss-Jordan with partial pivoting; null when singular
+    var n = A.length, M = A.map(function (r, i) { var row = r.slice(); for (var j = 0; j < n; j++) row.push(i === j ? 1 : 0); return row; });
+    for (var c = 0; c < n; c++) {
+      var piv = c;
+      for (var r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[piv][c])) piv = r;
+      if (Math.abs(M[piv][c]) < 1e-11) return null;
+      var tmp = M[c]; M[c] = M[piv]; M[piv] = tmp;
+      var d = M[c][c];
+      for (var j2 = 0; j2 < 2 * n; j2++) M[c][j2] /= d;
+      for (r = 0; r < n; r++) if (r !== c) { var f = M[r][c]; if (f) for (j2 = 0; j2 < 2 * n; j2++) M[r][j2] -= f * M[c][j2]; }
+    }
+    return M.map(function (row) { return row.slice(n); });
+  }
+
+  // X: n rows of predictor values WITHOUT the intercept column; y: n values. The intercept is always fitted.
+  function ols(X, y) {
+    var n = y.length, p = (X[0] ? X[0].length : 0) + 1, i, j, k;
+    if (n <= p) return { error: 'Not enough complete cases for this model (' + n + ' cases, ' + p + ' coefficients).' };
+    var D = X.map(function (r) { return [1].concat(r); });
+    var XtX = [], Xty = [];
+    for (i = 0; i < p; i++) { XtX.push(new Array(p).fill(0)); Xty.push(0); }
+    for (k = 0; k < n; k++) for (i = 0; i < p; i++) { Xty[i] += D[k][i] * y[k]; for (j = i; j < p; j++) XtX[i][j] += D[k][i] * D[k][j]; }
+    for (i = 0; i < p; i++) for (j = 0; j < i; j++) XtX[i][j] = XtX[j][i];
+    var inv = invert(XtX);
+    if (!inv) return { error: 'The predictors are perfectly collinear (or one has no spread), so the model cannot be fitted.' };
+    var b = inv.map(function (row) { var s = 0; for (var q = 0; q < p; q++) s += row[q] * Xty[q]; return s; });
+    var sse = 0, my = mean(y), sst = 0;
+    for (k = 0; k < n; k++) { var f = 0; for (i = 0; i < p; i++) f += D[k][i] * b[i]; sse += (y[k] - f) * (y[k] - f); sst += (y[k] - my) * (y[k] - my); }
+    var df = n - p, s2 = sse / df, tc = tCrit(df, 0.95);
+    var cov = inv.map(function (row) { return row.map(function (v) { return v * s2; }); });
+    var coef = b.map(function (bi, q) {
+      var se = Math.sqrt(cov[q][q]), t = bi / se;
+      return { b: bi, se: se, t: t, p: se > 0 ? pT2(t, df) : NaN, ciLo: bi - tc * se, ciHi: bi + tc * se };
+    });
+    var r2 = sst > 0 ? 1 - sse / sst : NaN, dfm = p - 1;
+    var F = dfm > 0 && sse > 0 ? ((sst - sse) / dfm) / (sse / df) : NaN;
+    return { n: n, p: p, df: df, coef: coef, cov: cov, r2: r2, adjR2: 1 - (1 - r2) * (n - 1) / df, F: F, dfm: dfm, pF: isFinite(F) ? pF(F, dfm, df) : NaN, sigma: Math.sqrt(s2) };
+  }
+
+  // variance inflation factors of the columns of X (no intercept): diagonal of the inverse correlation matrix
+  function vif(X) {
+    var k = X[0] ? X[0].length : 0, cols = [];
+    if (k < 2) return k ? [1] : [];
+    for (var j = 0; j < k; j++) cols.push(X.map(function (r) { return r[j]; }));
+    var inv = invert(corrMatrix(cols));
+    return inv ? inv.map(function (row, i) { return row[i]; }) : cols.map(function () { return Infinity; });
+  }
+
+  /* ---------- power and sensitivity for correlations ---------- */
+
+  function minR(n, power, alpha) {   // smallest |r| detectable with the given power, two-sided (Fisher z)
+    if (n <= 3) return NaN;
+    var za = normInv(1 - (alpha == null ? 0.05 : alpha) / 2), zb = normInv(power == null ? 0.8 : power);
+    return Math.tanh((za + zb) / Math.sqrt(n - 3));
+  }
+
+  function nForR(r, power, alpha) {
+    var za = normInv(1 - (alpha == null ? 0.05 : alpha) / 2), zb = normInv(power == null ? 0.8 : power);
+    return Math.ceil(Math.pow((za + zb) / Math.atanh(Math.abs(r)), 2) + 3);
+  }
+
   var api = {
     ibeta: ibeta, gammaQ: gammaQ, pT2: pT2, pF: pF, pChi2: pChi2, pZ2: pZ2, tCrit: tCrit,
-    mean: mean, sd: sd, median: median, describe: describe, ranks: ranks,
+    mean: mean, sd: sd, variance: variance, median: median, describe: describe, ranks: ranks,
     welchT: welchT, mannWhitney: mannWhitney, anova: anova, welchAnova: welchAnova, kruskal: kruskal,
     levene: levene, holm: holm, chiSquareRates: chiSquareRates, compare: compare,
-    effectWord: effectWord, nPerGroup: nPerGroup
+    effectWord: effectWord, nPerGroup: nPerGroup,
+    normCdf: normCdf, normInv: normInv, bh: bh, skew: skew, kurtosis: kurtosis, pearson: pearson, spearman: spearman, line: line,
+    corrMatrix: corrMatrix, cronbach: cronbach, omega: omega, invert: invert, ols: ols, vif: vif, minR: minR, nForR: nForR
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.ACMEStats = api;
