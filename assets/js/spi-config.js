@@ -15,6 +15,8 @@ window.SPI = {
     { id: 'colleghi-3', from: 'colleghi', file: 'p3-colleghi-3.mp4', phase: ['middle', 'end'], text: 'Ciao! Volevo dirti una cosa: con te in turno si lavora proprio bene.' },
     { id: 'colleghi-4', from: 'colleghi', file: 'p3-colleghi-4.mp4', phase: ['middle', 'end'], text: 'Ti mando solo un saluto veloce! Lo so che è un compito lungo, ma ce la stiamo cavando bene.' },
     { id: 'clienti-1', from: 'clienti', file: 'p3-clienti-1.mp4', phase: 'start', text: 'Buongiorno, ho appena fatto un ordine sul sito. Vi ringrazio e vi auguro una buona giornata.' },
-    { id: 'clienti-2', from: 'clienti', file: 'p3-clienti-2.mp4', phase: 'middle', text: 'Ciao! Immagino che oggi abbiate un sacco da fare, quindi grazie mille per la gentilezza!' }
+    { id: 'clienti-2', from: 'clienti', file: 'p3-clienti-2.mp4', phase: 'middle', text: 'Ciao! Immagino che oggi abbiate un sacco da fare, quindi grazie mille per la gentilezza!' },
+    { id: 'clienti-3', from: 'clienti', file: 'p3-clienti-3.mp4', phase: ['middle', 'end'], text: 'Salve! Volevo solo dirti grazie per il tempo che mi hai dedicato, davvero gentile da parte tua!' },
+    { id: 'clienti-4', from: 'clienti', file: 'p3-clienti-4.mp4', phase: 'end', text: "Ehi, volevo mandare un saluto a chi c'è dietro lo schermo. Buon lavoro e buona giornata!" }
   ]
 };
