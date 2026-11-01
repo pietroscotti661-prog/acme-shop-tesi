@@ -25,9 +25,9 @@ Breakout = {
       radius:  0.5,
       speed:   10,
       labels: {
-        3: { text: 'Ready...', fill: '#D82800', stroke: 'black', font: 'bold 28pt arial' },
-        2: { text: 'Set..',    fill: '#FC9838', stroke: 'black', font: 'bold 28pt arial' },
-        1: { text: 'GO!',      fill: '#80D010', stroke: 'black', font: 'bold 28pt arial' }
+        3: { text: 'Ready...', fill: '#FF8A6B', stroke: '#0d0f14', font: 'bold 28pt "Instrument Sans", arial' },
+        2: { text: 'Set..',    fill: '#FFB347', stroke: '#0d0f14', font: 'bold 28pt "Instrument Sans", arial' },
+        1: { text: 'GO!',      fill: '#8ED35A', stroke: '#0d0f14', font: 'bold 28pt "Instrument Sans", arial' }
       }
     },
 
@@ -38,12 +38,12 @@ Breakout = {
     },
 
     color: {
-      background: 'rgba(200, 200, 200, 0.5)',
-      foreground: 'green',
-      border:     '#222',
-      wall:       '#333',
-      ball:       'black',
-      paddle:     'rgb(245,111,37)',
+      background: '#16181d',
+      foreground: '#f8f6f1',
+      border:     'rgba(248, 246, 241, 0.14)',
+      wall:       '#2b3042',
+      ball:       '#f8f6f1',
+      paddle:     '#2b3bd6',
       score:      "transparent",
       highscore:  "transparent"
     },
@@ -401,17 +401,31 @@ Breakout = {
     render: function(ctx) {
       var n, brick;
 
-      ctx.translate(0.5, 0.5); // crisp 1px lines for the brick borders
-      ctx.strokeStyle = this.game.color.border;
-      ctx.lineWidth = 1;
+      // look only: rounded bricks with a small gap and a soft top highlight (same size and position as before)
+      var round = function(x, y, w, h, r) {
+        r = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y,     x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x,     y + h, r);
+        ctx.arcTo(x,     y + h, x,     y,     r);
+        ctx.arcTo(x,     y,     x + w, y,     r);
+        ctx.closePath();
+      };
       for(n = 0 ; n < this.numbricks ; n++) {
         brick = this.bricks[n];
         if (!brick.hit) {
           ctx.fillStyle = brick.color;
-          ctx.fillRect(brick.x, brick.y, brick.w, brick.h); 
-          ctx.strokeRect(brick.x, brick.y, brick.w, brick.h);
+          round(brick.x + 1, brick.y + 1, brick.w - 2, brick.h - 2, 3);
+          ctx.fill();
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.28)';
+          round(brick.x + 2, brick.y + 2, brick.w - 4, Math.max(2, (brick.h - 4) * 0.3), 2);
+          ctx.fill();
         }
       }
+      ctx.translate(0.5, 0.5); // crisp lines for the wall
+      ctx.strokeStyle = this.game.color.border;
+      ctx.lineWidth = 1;
 
       ctx.fillStyle = this.game.color.wall;
       ctx.lineWidth = 2;
@@ -595,10 +609,13 @@ Breakout = {
 
     draw: function(ctx) {
       ctx.fillStyle = this.color;
+      ctx.shadowColor = 'rgba(127, 140, 255, 0.9)'; // soft glow, look only
+      ctx.shadowBlur  = 12;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Game.THREESIXTY, true);
       ctx.fill();
-      ctx.stroke();
+      ctx.shadowBlur  = 0;
+      ctx.shadowColor = 'transparent';
       ctx.closePath();
 
       if (this.label) {
@@ -664,9 +681,9 @@ Breakout = {
     render: function(ctx) {
 
       var gradient = ctx.createLinearGradient(0, this.h, 0, 0);
-      gradient.addColorStop(0.36, 'rgb(245,111,37)');
-      gradient.addColorStop(0.68, 'rgb(255,145,63)');
-      gradient.addColorStop(0.84, 'rgb(255,174,95)');
+      gradient.addColorStop(0.36, '#2b3bd6');
+      gradient.addColorStop(0.68, '#5b69f0');
+      gradient.addColorStop(0.84, '#9aa4ff');
 
       var r = this.h/2;
 

@@ -1,38 +1,38 @@
 Breakout.Colors = {
 
   arkanoid: {
-    w: "#FCFCFC", // white
-    o: "#FC7460", // orange
-    l: "#3CBCFC", // light blue
-    g: "#80D010", // green
-    r: "#D82800", // red
-    b: "#0070EC", // blue
-    p: "#FC74B4", // pink
-    y: "#FC9838", // yellow
-    s: "#BCBCBC", // silver
-    d: "#F0BC3C"  // gold
+    w: "#F3EFE6", // white
+    o: "#FF8A6B", // orange
+    l: "#5CC8F2", // light blue
+    g: "#8ED35A", // green
+    r: "#E5533D", // red
+    b: "#4F6BFF", // blue
+    p: "#FF8FC4", // pink
+    y: "#FFB347", // yellow
+    s: "#A7ADBF", // silver
+    d: "#F2C14E"  // gold
   },
 
   pastel: {
-    y: "#FFF7A5", // yellow
-    p: "#FFA5E0", // pink
-    b: "#A5B3FF", // blue
-    g: "#BFFFA5", // green
-    o: "#FFCBA5"  // orange
+    y: "#FFE88A", // yellow
+    p: "#FF9FD2", // pink
+    b: "#9DB0FF", // blue
+    g: "#A8EFA0", // green
+    o: "#FFBE8F"  // orange
   },
 
   vintage: {
-    a: "#EFD279", // yellow
-    b: "#95CBE9", // light blue
-    c: "#024769", // dark blue
-    d: "#AFD775", // light green
-    e: "#2C5700", // grass
-    f: "#DE9D7F", // red
-    g: "#7F9DDE", // purple
-    h: "#00572C", // dark green
-    i: "#75D7AF", // mint
-    j: "#694702", // brown
-    k: "#E9CB95", // peach
+    a: "#F0D27A", // yellow
+    b: "#8FCBEA", // light blue
+    c: "#3F6FD8", // dark blue
+    d: "#A9DB72", // light green
+    e: "#4E9B3A", // grass
+    f: "#E39A7E", // red
+    g: "#8C9CF0", // purple
+    h: "#1F9E73", // dark green
+    i: "#7FE0B8", // mint
+    j: "#B8803A", // brown
+    k: "#EBCFA0", // peach
     l: "#79D2EF"  // blue
   },
 

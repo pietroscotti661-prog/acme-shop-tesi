@@ -1972,7 +1972,18 @@ body.acme-game #breakout {
 }
 
 body.acme-game #instructions {
+  padding: 14px 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: var(--ink);
   font-family: var(--font);
+  line-height: 1.6;
+}
+
+body.acme-game #instructions b {
+  color: var(--ink);
 }
 
 /* ---------- Wider screens: side rail shell ----------
