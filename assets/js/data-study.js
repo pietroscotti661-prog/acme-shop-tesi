@@ -21,13 +21,17 @@
     { key: 'attention', label: 'Attention check failed', hint: 'The answer is not the correct one. Choose the column and the correct answer below.', on: true },
     { key: 'missing', label: 'Too many missing items', hint: 'Share of unanswered scale items above the limit.', on: true, param: { key: 'missingPct', label: 'max % missing', val: 20 } },
     { key: 'progress', label: 'Stopped early', hint: 'Reached less than a share of the orders, tickets or levels.', on: false, param: { key: 'progressPct', label: 'min % reached', val: 50 } },
+    { key: 'integrity', label: 'Session not clean', hint: 'Task checks: two runs under one code, a page loaded twice, or pages out of order.', on: false },
+    { key: 'spi', label: 'SPI exposure incomplete', hint: 'Task checks: in an SPI condition a planned video was not shown or did not play to the end.', on: false },
+    { key: 'hidden', label: 'Left the task window', hint: 'Task checks: the tab was hidden for longer than the limit (sessions recorded with logger version 2).', on: false, param: { key: 'hiddenSec', label: 'max seconds hidden', val: 30 } },
     { key: 'outlier', label: 'Extreme values', hint: 'Any scale or task measure further than 3.29 SD from the mean (listed, not excluded unless switched on).', on: false },
     { key: 'manual', label: 'Excluded by hand', hint: 'Sessions added to the list below.', on: true }
   ];
   var RULE_LABEL = {};
   RULES.forEach(function (r) { RULE_LABEL[r.key] = r.label; });
   var RULE_IT = { unfinished: 'compito non concluso', nomatch: 'questionario non abbinato', speed: 'questionario compilato troppo in fretta', straight: 'risposte sempre uguali',
-    attention: 'controllo di attenzione fallito', missing: 'troppi item mancanti', progress: 'compito interrotto presto', outlier: 'valori estremi', manual: 'esclusione manuale' };
+    attention: 'controllo di attenzione fallito', missing: 'troppi item mancanti', progress: 'compito interrotto presto', outlier: 'valori estremi', manual: 'esclusione manuale',
+    integrity: 'sessione non integra (codice riusato, pagina ricaricata o pagine fuori ordine)', spi: 'esposizione ai video SPI incompleta', hidden: 'scheda del compito nascosta troppo a lungo' };
   var COND_IT = { obj_cond: 'Oggettivante', obj_spi_colleghi: 'Oggettivante + SPI colleghi', obj_spi_clienti: 'Oggettivante + SPI clienti', obj_spi_test_cond: 'Oggettivante + SPI (prova)', not_obj_cond: 'Non oggettivante', control: 'Controllo (Arkanoid)' };
   var VAR_IT = { 'd:spi': 'SPI ricevute (0 no, 1 sì)', 'd:src': 'Fonte delle SPI (0 colleghi, 1 clienti)', 'd:obj': 'Compito oggettivante (1) o non oggettivante (0)', 't:submitRate': 'Ordini inviati in tempo (%)',
     't:onpage': "Secondi medi su una pagina d'ordine", 't:submit': 'Secondi medi per inviare un ordine', 't:dur': 'Durata della sessione (min)', 't:clicks': 'Click nella sessione', 't:vwatch': 'Video SPI guardati fino alla fine (%)' };
@@ -263,6 +267,11 @@
       }
       if (tot && (P.rules.progress.progressPct || 0) > 0 && s.maxStep / tot < P.rules.progress.progressPct / 100) hit.progress = 1;
       if (outl[rec.key]) hit.outlier = 1;
+      if (s.task) {   // flags of the Task checks section (data-task.js)
+        if (s.task.flags.indexOf('merged') !== -1 || s.task.flags.indexOf('reload') !== -1 || s.task.flags.indexOf('sequence') !== -1) hit.integrity = 1;
+        if (s.task.flags.indexOf('spi') !== -1) hit.spi = 1;
+        if (s.task.v2 && s.task.hidden > (P.rules.hidden.hiddenSec == null ? 30 : P.rules.hidden.hiddenSec)) hit.hidden = 1;
+      }
       if (manual[rec.key]) hit.manual = 1;
       Object.keys(hit).forEach(function (k) { (P.rules[k].on ? rec.reasons : rec.reasonsOff).push(k); M.flagged[k] = (M.flagged[k] || 0) + 1; });
     });

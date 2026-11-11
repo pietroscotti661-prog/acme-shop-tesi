@@ -15,7 +15,7 @@
     obj_spi_clienti: { label: 'Obj + SPI customers', short: 'SPI cus', unit: 'orders', total: 33 },
     obj_spi_test_cond: { label: 'Obj + SPI test', short: 'SPI test', unit: 'orders', total: 33 },
     not_obj_cond: { label: 'Not objectifying', short: 'Not obj', unit: 'tickets', total: 16 },
-    control: { label: 'Control (Arkanoid)', short: 'Control', unit: 'levels', total: 10 }
+    control: { label: 'Control (Ring Court)', short: 'Control', unit: 'levels', total: 10 }
   };
   var COND_KEYS = Object.keys(COND);
   var TIMED = ['obj_cond', 'obj_spi_colleghi', 'obj_spi_clienti', 'obj_spi_test_cond'];
@@ -99,6 +99,20 @@
       case 'spi_shown': return (d.clip || '') + (d.from ? ' from ' + d.from : '') + (d.secondsLeft != null ? ', ' + d.secondsLeft + ' s left' : '');
       case 'spi_ended': return (d.clip || '') + (d.completed === true ? ', watched to the end' : d.completed === false ? ', interrupted' : '');
       case 'session_start': return [d.screen, d.ua].filter(Boolean).join(' · ');
+      case 'env': return 'window ' + d.vw + ' x ' + d.vh + (d.lang ? ', ' + d.lang : '') + ', logger v' + d.v;
+      case 'visibility': return d.state === 'visible' ? 'tab back after ' + fmtDur(d.ms) : 'tab hidden';
+      case 'focus': return d.on ? 'window active again after ' + fmtDur(d.ms) : 'window not active';
+      case 'order_state':
+        return (d.at === 'submit' ? 'sent' : 'on leaving') + (d.price != null ? ', cost ' + d.price : '') + (d.budget ? ', budget ' + d.budget.join('-') : '') +
+          (d.left != null ? ', ' + d.left + ' s left' : '') + (d.words != null ? ', reply ' + d.words + ' words' : '');
+      case 'spi_play': return (d.clip || '') + ' started after ' + d.delay + ' ms' + (d.muted ? ', without sound' : '');
+      case 'spi_exposure':
+        return (d.clip || '') + ' played ' + d.played + (d.dur ? ' of ' + d.dur : '') + ' s' + (d.ended ? ', to the end' : ', stopped (' + d.at + ')') +
+          (d.vis != null ? ', ' + Math.round(d.vis * 100) + '% in window' : '') + (d.muted ? ', without sound' : '');
+      case 'game_start': return 'level ' + d.level + (d.layout ? ', layout ' + d.layout : '');
+      case 'game_end':
+        return 'score ' + d.score + ', ' + d.tiles + ' tiles, ' + d.lost + ' balls lost, ' + d.launches + ' launches' + (d.partial ? ', page closed early' : '');
+      case 'js_error': return [d.msg, d.src, d.line ? 'line ' + d.line : ''].filter(Boolean).join(' · ');
       default:
         var keys = Object.keys(d);
         return keys.length ? JSON.stringify(d).slice(0, 120) : '';
@@ -201,7 +215,11 @@
           t = start + ms;
           push('page_leave', page, { ms: Math.round(ms) });
         };
-        push('session_start', 'index.html', { screen: pick(screens), ua: pick(uas) });
+        var scr = pick(screens);
+        push('session_start', 'index.html', { screen: scr, ua: pick(uas) });
+        var odd = rnd();   // a few sessions get something for the task checks to find
+        var narrow = odd < 0.08, wander = odd >= 0.08 && odd < 0.22, cut = odd >= 0.22 && odd < 0.32;
+        push('env', 'index.html', { v: 2, vw: narrow ? 820 : parseInt(scr, 10), vh: +scr.split('x')[1] - 110, dpr: 1, lang: 'it-IT', tz: -60 });
 
         if (TIMED.indexOf(cond) !== -1) {
           visit(cond + '/acme_shop_2.html', between(70, 160) * 1000, [[between(60, 150) * 1000, { tag: 'A', id: '', text: 'Start your day at work!' }]]);
@@ -222,17 +240,33 @@
             push('page_view', page, {}, 300);
             var s0 = t;
             clicks.forEach(function (c) { t = s0 + c[0]; push('click', page, c[1]); });
+            var lo = pick([450, 500, 500, 500]), hi = lo + pick([0, 50, 50]), cost = Math.round(between(lo - 60, hi + 45));
+            var form = { n: o, price: cost, days: Math.round(cost / 200), budget: hi > lo ? [lo, hi] : [lo], sel: ['99', '300', '0'], chk: ['brochure'] };
+            if (!missed) out.push({ id: id++, sid: sid, t: Math.round(s0 + submit - 1), cond: cond, page: page, type: 'order_state',
+              d: { at: 'submit', sends: 0, n: o, price: form.price, days: form.days, left: Math.max(1, Math.round((limit - submit) / 1000) - 1), budget: form.budget, sel: form.sel, chk: form.chk } });
+            if (wander && o % 9 === 4) {
+              var away = Math.round(between(6, 19) * 1000);
+              out.push({ id: id++, sid: sid, t: Math.round(s0 + 4000), cond: cond, page: page, type: 'visibility', d: { state: 'hidden' } });
+              out.push({ id: id++, sid: sid, t: Math.round(s0 + 4000 + away), cond: cond, page: page, type: 'visibility', d: { state: 'visible', ms: away } });
+            }
             if (cond !== 'obj_cond' && SPI_ORDERS.indexOf(o) !== -1) {
               var pool = src === 'colleghi' ? ['colleghi-1', 'colleghi-2', 'colleghi-3', 'colleghi-4'] : ['clienti-1', 'clienti-2', 'clienti-3', 'clienti-4'];
               var clip = pick(pool.filter(function (c) { return used.indexOf(c) === -1; }));
               used.push(clip);
               var left = Math.min(30, Math.round(limit / 1000) - 1);
               var at = s0 + (limit - left * 1000) + 100;
+              var len = Math.round(between(8.2, 9.6) * 10) / 10, wait = Math.round(between(120, 700)), whole = !(cut && o === 15);
+              var seen = whole ? len : Math.round(between(1.5, 5) * 10) / 10;
               out.push({ id: id++, sid: sid, t: Math.round(at), cond: cond, page: page, type: 'spi_shown', d: { clip: clip, from: src, secondsLeft: left } });
-              out.push({ id: id++, sid: sid, t: Math.round(at + between(17, 24) * 1000), cond: cond, page: page, type: 'spi_ended', d: { clip: clip, completed: rnd() > 0.1 } });
+              out.push({ id: id++, sid: sid, t: Math.round(at + wait), cond: cond, page: page, type: 'spi_play', d: { clip: clip, delay: wait, muted: false } });
+              if (whole) out.push({ id: id++, sid: sid, t: Math.round(at + wait + len * 1000), cond: cond, page: page, type: 'spi_ended', d: { clip: clip, completed: true } });
+              out.push({ id: id++, sid: sid, t: Math.round(at + wait + seen * 1000 + 1), cond: cond, page: page, type: 'spi_exposure',
+                d: { clip: clip, at: whole ? 'end' : 'error', played: seen, dur: len, ended: whole, started: true, delay: wait, muted: false, stalls: 0, vis: narrow ? 0.72 : 1, w: narrow ? 820 : 300, h: narrow ? 170 : 410, hidden: 0 } });
             }
-            t = s0 + limit;
-            push('page_leave', page, { ms: Math.round(limit) });
+            var late = wander && o % 9 === 4 ? Math.round(between(2500, 9000)) : 0;   // a hidden tab slows the page timers down
+            t = s0 + limit + late;
+            out.push({ id: id++, sid: sid, t: Math.round(t), cond: cond, page: page, type: 'order_state', d: { at: 'leave', sends: missed ? 0 : 1, n: o, price: form.price, days: form.days, left: null, budget: form.budget, sel: form.sel, chk: form.chk } });
+            push('page_leave', page, { ms: Math.round(limit + late) });
           }
           if (!drop) push('end_task', cond + '/end_task.html', {}, 500);
         } else if (cond === 'not_obj_cond') {
@@ -240,7 +274,10 @@
           var lastT = drop ? Math.floor(between(5, 14)) : 16;
           for (var q = 1; q <= lastT; q++) {
             var ms = between(45, 110) * 1000;
-            visit('not_obj_cond/' + NOT_OBJ_PAGES[q - 1] + '.html', ms, [
+            var tp = 'not_obj_cond/' + NOT_OBJ_PAGES[q - 1] + '.html', w0 = Math.round(between(18, 70));
+            out.push({ id: id++, sid: sid, t: Math.round(t + 400 + ms * 0.92 - 1), cond: cond, page: tp, type: 'order_state', d: { at: 'submit', sends: 0, n: q, chars: w0 * 6, words: w0 } });
+            if (rnd() < 0.5) out.push({ id: id++, sid: sid, t: Math.round(t + 400 + ms * 0.35), cond: cond, page: 'not_obj_cond/' + pick(['help_desk', 'calendar', 'catalogue_printers', 'catalogue_monitor']) + '.html', type: 'page_view', d: {} });
+            visit(tp, ms, [
               [ms * 0.3, { tag: 'A', id: '', text: pick(['Help desk', 'Calendar', 'Catalogue']) }],
               [ms * 0.92, { tag: 'INPUT', id: 'evadi', text: 'Reply to the customer' }]
             ]);
@@ -250,7 +287,13 @@
           visit('control/acme_shop_control.html', between(40, 90) * 1000, [[between(30, 80) * 1000, { tag: 'A', id: '', text: 'Start' }]]);
           var lastL = drop ? Math.floor(between(3, 8)) : 10;
           for (var l = 1; l <= lastL; l++) {
-            visit('control/level' + l + '/index.html', 121000, [[between(2, 6) * 1000, { tag: 'CANVAS', id: 'breakout', text: '' }]]);
+            var lp = 'control/level' + l + '/index.html', lay = ['band', 'spokes', 'spiral', 'checker', 'bloom', 'gates', 'halves', 'spokes', 'checker', 'gates'][l - 1];
+            var lazy = cut && l === 7, got = lazy ? 0 : Math.round(between(18, 60));
+            out.push({ id: id++, sid: sid, t: Math.round(t + 450), cond: cond, page: lp, type: 'game_start', d: { level: l, layout: lay, tiles: 30 } });
+            out.push({ id: id++, sid: sid, t: Math.round(t + 400 + 120000), cond: cond, page: lp, type: 'game_end',
+              d: { level: l, layout: lay, score: got * 10, tiles: got, clears: got > 30 ? 1 : 0, lost: lazy ? 0 : Math.round(between(1, 9)), rounds: 0, launches: lazy ? 0 : Math.round(between(2, 10)), hits: got ? Math.round(got * between(0.8, 1.6)) : 0,
+                first: lazy ? null : Math.round(between(900, 5000)), play: lazy ? 0 : Math.round(between(85, 116)), active: lazy ? 0 : Math.round(between(40, 95)), keys: Math.round(between(0, 40)) } });
+            visit(lp, 121000, []);
           }
           if (!drop) push('end_task', 'control/end_task.html', {}, 500);
         }
@@ -325,6 +368,7 @@
   function render() {
     var list = events();
     state.sessions = buildSessions(list);
+    if (window.ACME_TASK) window.ACME_TASK.build(state.sessions);   // steps and flags of each session (data-task.js)
     var has = list.length > 0;
 
     document.body.classList.toggle('dv-is-sample', state.useSample);
@@ -350,6 +394,7 @@
     renderOrderChart();
     renderFilters();
     renderTable();
+    if (window.ACME_TASK) window.ACME_TASK.render();
     if (window.ACME_STUDY) window.ACME_STUDY.refresh();       // builds the exclusions and scale scores the analysis uses
     if (window.ACME_ANALYSIS) window.ACME_ANALYSIS.render();
     if (state.openSid) openDrawer(state.openSid);
@@ -451,8 +496,8 @@
     });
     var k = state.sort.key, dir = state.sort.dir;
     rows.sort(function (a, b) {
-      var va = k === 'cond' ? condLabel(a.cond) : k === 'orders' ? a.maxStep : a[k];
-      var vb = k === 'cond' ? condLabel(b.cond) : k === 'orders' ? b.maxStep : b[k];
+      var val = function (x) { return k === 'cond' ? condLabel(x.cond) : k === 'orders' ? x.maxStep : k === 'checks' ? (x.task ? x.task.flags.length : 0) : x[k]; };
+      var va = val(a), vb = val(b);
       if (typeof va === 'string') return va.localeCompare(vb) * dir;
       return ((va || 0) - (vb || 0)) * dir;
     });
@@ -469,7 +514,7 @@
     $('dv-count').textContent = rows.length + ' of ' + state.sessions.length;
     var body = $('dv-tbody');
     if (!rows.length) {
-      body.innerHTML = '<tr><td colspan="8" class="dv-td-empty">No session matches the search.</td></tr>';
+      body.innerHTML = '<tr><td colspan="9" class="dv-td-empty">No session matches the search.</td></tr>';
       return;
     }
     body.innerHTML = rows.map(function (s) {
@@ -482,6 +527,7 @@
         '<td class="dv-num">' + s.pages + '</td>' +
         '<td class="dv-num">' + esc(progressText(s)) + (c ? ' <small>' + c.unit + '</small>' : '') + '</td>' +
         '<td class="dv-num">' + (s.videos ? s.videos + (s.videosDone !== s.videos ? ' <small>' + s.videosDone + ' watched</small>' : '') : '<span class="dv-dim">0</span>') + '</td>' +
+        '<td class="dv-td-check">' + (window.ACME_TASK ? window.ACME_TASK.badge(s) : '') + '</td>' +
         '<td class="dv-td-state">' + (s.finished ? '<span class="dv-state dv-state--done">Completed</span>' : '<span class="dv-state">Stopped</span>') + '</td>' +
         '</tr>';
     }).join('');
@@ -511,7 +557,7 @@
         '</span></li>';
     }).join('');
     $('dv-d-count').textContent = s.events.length + ' events';
-    $('dv-d-study').innerHTML = window.ACME_STUDY ? window.ACME_STUDY.drawerHtml(s) : '';
+    $('dv-d-study').innerHTML = (window.ACME_TASK ? window.ACME_TASK.drawerHtml(s) : '') + (window.ACME_STUDY ? window.ACME_STUDY.drawerHtml(s) : '');
     var d = $('dv-drawer');
     var wasOpen = d.classList.contains('is-open');
     d.classList.add('is-open');
@@ -575,9 +621,11 @@
 
   function exportSessionsCsv() {
     var head = ['sid', 'cond', 'start_iso', 'end_iso', 'duration_s', 'events', 'page_views', 'steps_reached', 'max_step', 'unit', 'spi_shown', 'spi_completed', 'finished', 'screen', 'ua'];
+    var T = window.ACME_TASK;
+    if (T) head = head.concat(T.sessionHead());
     var rows = state.sessions.slice().sort(function (a, b) { return a.start - b.start; }).map(function (s) {
       return [s.sid, s.cond, new Date(s.start).toISOString(), new Date(s.end).toISOString(), Math.round(s.dur / 1000), s.events.length, s.pages,
-        s.steps, s.maxStep, COND[s.cond] ? COND[s.cond].unit : '', s.videos, s.videosDone, s.finished ? 1 : 0, s.screen, s.ua].map(csvCell).join(',');
+        s.steps, s.maxStep, COND[s.cond] ? COND[s.cond].unit : '', s.videos, s.videosDone, s.finished ? 1 : 0, s.screen, s.ua].concat(T ? T.sessionRow(s) : []).map(csvCell).join(',');
     });
     download(prefix() + 'sessions-' + stamp() + '.csv', '﻿' + head.join(',') + '\r\n' + rows.join('\r\n') + '\r\n', 'text/csv;charset=utf-8');
   }
@@ -661,11 +709,13 @@
   function init() {
     state.idb = idbAvailable();
     var hostApi = {
-      COND: COND, TIMED: TIMED, stepOf: stepOf, isTimedOrder: isTimedOrder, esc: esc,
+      COND: COND, TIMED: TIMED, LIMIT: LIMIT, SPI_ORDERS: SPI_ORDERS, NOT_OBJ_PAGES: NOT_OBJ_PAGES, stepOf: stepOf, isTimedOrder: isTimedOrder, esc: esc, fmtDur: fmtDur,
+      open: function (sid) { openDrawer(sid); },
       sessions: function () { return state.sessions; }, isSample: function () { return state.useSample; },
       toast: function (m, w) { toast(m, w); }, download: download, csvCell: csvCell, stamp: stamp, prefix: function () { return prefix(); },
       refresh: function () { render(); }
     };
+    if (window.ACME_TASK) window.ACME_TASK.init(hostApi);
     if (window.ACME_ANALYSIS) window.ACME_ANALYSIS.init(hostApi);
     if (window.ACME_STUDY && window.ACME_ANALYSIS) window.ACME_STUDY.init(hostApi, window.ACME_ANALYSIS);
 
@@ -727,7 +777,7 @@
     // export buttons only make sense with data on screen
     var refreshButtons = function () {
       var none = !events().length;
-      ['dv-exp-events', 'dv-exp-sessions', 'dv-exp-json'].forEach(function (id) { $(id).disabled = none; });
+      ['dv-exp-events', 'dv-exp-sessions', 'dv-exp-trials', 'dv-exp-json'].forEach(function (id) { if ($(id)) $(id).disabled = none; });
     };
     var _render = render;
     render = function () { _render(); refreshButtons(); };

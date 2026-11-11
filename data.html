@@ -14,10 +14,11 @@
   <nav class="dv-nav">
     <a href="#overview"><span>01</span>Overview</a>
     <a href="#charts"><span>02</span>Charts</a>
-    <a href="#analysis"><span>03</span>Analysis</a>
-    <a href="#study"><span>04</span>Questionnaire study</a>
-    <a href="#sessions"><span>05</span>Sessions</a>
-    <a href="#transfer"><span>06</span>Export and import</a>
+    <a href="#checks"><span>03</span>Task checks</a>
+    <a href="#analysis"><span>04</span>Analysis</a>
+    <a href="#study"><span>05</span>Questionnaire study</a>
+    <a href="#sessions"><span>06</span>Sessions</a>
+    <a href="#transfer"><span>07</span>Export and import</a>
   </nav>
   <div class="dv-source">
     <p class="dv-mono-label">Source</p>
@@ -90,8 +91,13 @@
       </div>
     </section>
 
+    <section id="checks" class="dv-section" aria-labelledby="dv-checks-title">
+      <h2 class="dv-section-title" id="dv-checks-title"><span>03</span>Task checks</h2>
+      <div id="dv-tk" class="dv-tk"></div>
+    </section>
+
     <section id="analysis" class="dv-section" aria-labelledby="dv-analysis-title">
-      <h2 class="dv-section-title" id="dv-analysis-title"><span>03</span>Analysis</h2>
+      <h2 class="dv-section-title" id="dv-analysis-title"><span>04</span>Analysis</h2>
       <div class="dv-panel dv-an">
         <p class="dv-an-intro">Runs by itself on every refresh. Compares the groups on each measure with Welch tests and rank tests, corrects across measures with Holm, and gives effect sizes. Click a row for the detail. The main outcome of the study is the questionnaire: import its CSV below to analyse it the same way.</p>
         <div class="dv-an-controls">
@@ -116,7 +122,7 @@
     </section>
 
     <section id="study" class="dv-section" aria-labelledby="dv-study-title">
-      <h2 class="dv-section-title" id="dv-study-title"><span>04</span>Questionnaire study</h2>
+      <h2 class="dv-section-title" id="dv-study-title"><span>05</span>Questionnaire study</h2>
       <div class="dv-panel dv-st">
         <div class="dv-st-scope" id="dv-st-scope"></div>
         <div class="dv-st-tabs" id="dv-st-tabs" role="tablist" aria-label="Questionnaire study tools"></div>
@@ -125,7 +131,7 @@
     </section>
 
     <section id="sessions" class="dv-section" aria-labelledby="dv-sessions-title">
-      <h2 class="dv-section-title" id="dv-sessions-title"><span>05</span>Sessions <small id="dv-count"></small></h2>
+      <h2 class="dv-section-title" id="dv-sessions-title"><span>06</span>Sessions <small id="dv-count"></small></h2>
       <div class="dv-panel dv-table-panel">
         <div class="dv-toolbar">
           <label class="dv-search">
@@ -149,6 +155,7 @@
                 <th data-key="pages" scope="col"><button type="button">Pages</button></th>
                 <th data-key="orders" scope="col"><button type="button">Reached</button></th>
                 <th data-key="videos" scope="col"><button type="button">Videos</button></th>
+                <th data-key="checks" scope="col"><button type="button">Checks</button></th>
                 <th scope="col" class="dv-th-plain">Status</th>
               </tr>
             </thead>
@@ -160,7 +167,7 @@
   </div>
 
   <section id="transfer" class="dv-section" aria-labelledby="dv-transfer-title">
-    <h2 class="dv-section-title" id="dv-transfer-title"><span>06</span>Export and import</h2>
+    <h2 class="dv-section-title" id="dv-transfer-title"><span>07</span>Export and import</h2>
     <div class="dv-transfer">
       <div class="dv-panel dv-tcard">
         <p class="dv-mono-label">Export</p>
@@ -168,6 +175,7 @@
         <div class="dv-tbtns">
           <button type="button" class="dv-btn dv-btn--file" id="dv-exp-events">Events CSV <small>one row per event</small></button>
           <button type="button" class="dv-btn dv-btn--file" id="dv-exp-sessions">Sessions CSV <small>one row per session</small></button>
+          <button type="button" class="dv-btn dv-btn--file" id="dv-exp-trials">Trials CSV <small>one row per order, ticket or game trial</small></button>
           <button type="button" class="dv-btn dv-btn--file" id="dv-exp-json">JSON <small>full backup</small></button>
         </div>
       </div>
@@ -223,6 +231,7 @@
 <div class="dv-toast" id="dv-toast" role="status" aria-live="polite"></div>
 <input type="file" id="dv-file" accept=".json,application/json" hidden>
 <script src="assets/js/data-stats.js"></script>
+<script src="assets/js/data-task.js"></script>
 <script src="assets/js/data-analysis.js"></script>
 <script src="assets/js/data-study.js"></script>
 <script src="assets/js/data-view.js"></script>

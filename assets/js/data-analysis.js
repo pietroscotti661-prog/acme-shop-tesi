@@ -17,7 +17,15 @@
     { key: 'submit', label: 'Mean seconds to submit an order', unit: 's', dec: 1, timed: true },
     { key: 'dur', label: 'Session duration', unit: 'min', dec: 1 },
     { key: 'clicks', label: 'Clicks in the session', unit: '', dec: 0 },
-    { key: 'vwatch', label: 'SPI videos watched to the end', unit: '%', dec: 0 }
+    { key: 'vwatch', label: 'SPI videos watched to the end', unit: '%', dec: 0 },
+    // from data-task.js (most need logger version 2: older sessions have no value and are left out).
+    // check: true = a data-quality or manipulation check: it goes in the dataset and the codebook, not in the family of tests.
+    { key: 'gap', label: 'Mean distance of the order cost from the budget', unit: '€', dec: 1, timed: true },
+    { key: 'words', label: 'Mean words in the reply to a ticket', unit: '', dec: 1 },
+    { key: 'gscore', label: 'Mean score per game trial', unit: '', dec: 0 },
+    { key: 'missed', label: 'Orders not sent in time', unit: '', dec: 1, timed: true, check: true },
+    { key: 'hidden', label: 'Seconds with the tab hidden', unit: 's', dec: 1, check: true },
+    { key: 'vplayed', label: 'Mean seconds of SPI video played', unit: 's', dec: 1, check: true }
   ];
 
   function groupings() {
@@ -80,6 +88,7 @@
       if (sub.length) m.submit = S.mean(sub);
     }
     if (s.videos > 0) m.vwatch = s.videosDone / s.videos * 100;
+    if (window.ACME_TASK) { var tm = window.ACME_TASK.metrics(s); Object.keys(tm).forEach(function (k) { m[k] = tm[k]; }); }
     s._m = m;
     return m;
   }
@@ -166,7 +175,7 @@
   /* ---------- groups and results ---------- */
 
   function allMetrics() {
-    return METRICS.concat(outcomeColumns());
+    return METRICS.filter(function (m) { return !m.check; }).concat(outcomeColumns());
   }
 
   function valueOf(metric, s) {

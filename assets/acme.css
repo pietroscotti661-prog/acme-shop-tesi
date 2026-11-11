@@ -1900,7 +1900,7 @@ body.acme-popup .fc-event {
   font-size: 11px;
 }
 
-/* ---------- Control condition: game pages ---------- */
+/* ---------- Control condition: game pages (Ring Court, control/game/ringcourt.js) ---------- */
 
 body.acme-game {
   padding: 0 16px 24px;
@@ -1917,13 +1917,20 @@ body.acme-game #container {
   width: fit-content;
   max-width: 100%;
   margin: 0 auto;
+  transition: opacity 600ms ease;
+}
+
+/* end of the trial: the page fades before the next one opens */
+body.acme-game #container.is-over {
+  opacity: 0;
+  pointer-events: none;
 }
 
 body.acme-game h1 {
   grid-column: 1;
   width: 0;
   min-width: 100%;
-  margin: 24px 0 16px;
+  margin: 20px 0 14px;
   color: var(--ink);
   font: 600 24px/1.15 var(--font);
   font-stretch: 85%;
@@ -1933,7 +1940,8 @@ body.acme-game h1 {
 
 body.acme-game #clockdiv {
   grid-column: 2;
-  margin: 24px 0 16px;
+  display: flex;
+  margin: 20px 0 14px;
   color: var(--on-ink);
   font: 600 26px/1 var(--mono);
 }
@@ -1949,11 +1957,13 @@ body.acme-game #clockdiv > div + div {
 }
 
 body.acme-game #clockdiv div > span {
+  display: block;
   min-width: 60px;
   padding: 9px 10px;
   background: rgba(248, 246, 241, 0.1);
   border-radius: 0;
   letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }
 
 body.acme-game .smalltext {
@@ -1964,26 +1974,114 @@ body.acme-game .smalltext {
   text-transform: uppercase;
 }
 
-body.acme-game #breakout {
+/* the court: an ink square with the cut corner of the instrument panels; it always fits the window */
+body.acme-game #court {
   grid-column: 1 / -1;
-  border: 1px solid var(--ink);
-  border-radius: 0;
-  box-shadow: var(--shadow);
+  position: relative;
+  width: min(720px, 100vw - 32px, 100vh - 132px);
+  min-width: 280px;
+  aspect-ratio: 1;
+  background: var(--ink);
+  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%);
+  cursor: crosshair;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+body.acme-game #canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 body.acme-game #instructions {
-  padding: 14px 22px;
+  position: absolute;
+  left: 50%;
+  top: 78%;
+  width: max-content;
+  max-width: 78%;
+  padding: 12px 20px;
+  transform: translateX(-50%);
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  color: var(--ink);
-  font-family: var(--font);
-  line-height: 1.6;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  color: var(--ink-2);
+  font: 400 14px/1.6 var(--font);
+  pointer-events: none;
+}
+
+body.acme-game #instructions[hidden] {
+  display: none;
 }
 
 body.acme-game #instructions b {
   color: var(--ink);
+  font-weight: 600;
+}
+
+body.acme-game .unsupported {
+  padding: 32px;
+  color: var(--on-ink);
+}
+
+@media (max-width: 560px) {
+  body.acme-game h1 {
+    font-size: 18px;
+  }
+
+  body.acme-game #clockdiv {
+    font-size: 20px;
+  }
+
+  body.acme-game #clockdiv div > span {
+    min-width: 44px;
+    padding: 7px 8px;
+  }
+
+  body.acme-game #instructions {
+    top: auto;
+    bottom: 12px;
+    width: auto;
+    max-width: none;
+    left: 12px;
+    right: 12px;
+    padding: 8px 12px;
+    transform: none;
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+}
+
+/* Control intro: a small drawing of the court next to the description of the game */
+.game-sketch {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  margin: 4px 0 22px;
+  padding: 16px 20px 16px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.game-sketch svg {
+  display: block;
+  width: 148px;
+  height: 148px;
+}
+
+.game-sketch p {
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .game-sketch {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
 }
 
 /* ---------- Wider screens: side rail shell ----------
@@ -2280,6 +2378,27 @@ select:active {
   transform: translateY(0) scale(0.99);
   box-shadow: var(--shadow);
   transition-duration: 90ms;
+}
+
+/* Order sent (class set by acme-lock.js): the fields are locked until the next order, so nothing
+   lifts or looks clickable any more. The wording and the red of "Please wait for the next order" come
+   from the order page; here the red is only made dark enough to read on the grey button (4.7:1). */
+body.acme-sent #ordine .rdioChk,
+body.acme-sent #ordine select,
+body.acme-sent #evadi {
+  transform: none !important;
+  box-shadow: none !important;
+  cursor: default;
+}
+
+body.acme-sent #ordine .rdioChk label,
+body.acme-sent #ordine .rdioChk input {
+  cursor: default;
+}
+
+body.acme-sent #evadi {
+  opacity: 1 !important;
+  color: #b42318 !important;
 }
 
 /* keyboard focus: accent ring, never hidden */
@@ -4395,6 +4514,184 @@ body.acme-data .dv-switch .dv-switch-text {
 
 .dv-st-body .dv-an-plot {
   max-width: 680px;
+}
+
+/* ---------- data page: task checks (assets/js/data-task.js) ---------- */
+
+.dv-tk-kpis {
+  margin-bottom: 12px;
+}
+
+.dv-tk-kpis .dv-kpi {
+  min-height: 112px;
+}
+
+.dv-tk-note {
+  max-width: 96ch;
+}
+
+.dv-tk-panel .dv-an-controls {
+  margin-bottom: 14px;
+}
+
+.dv-tk-sub {
+  margin: 26px 0 10px;
+}
+
+.dv-tk-flags td:first-child {
+  min-width: 300px;
+  white-space: normal;
+}
+
+.dv-tk-flags td:last-child {
+  white-space: normal;
+  line-height: 2;
+}
+
+.dv-tk-flags .dv-st-hint {
+  margin-left: 0;
+}
+
+.dv-tk-left2 td:nth-child(2),
+.dv-tk-left2 td:last-child {
+  text-align: left;
+  white-space: normal;
+}
+
+.dv-tk .dv-code {
+  white-space: nowrap;
+}
+
+.dv-tk-per td:first-child,
+.dv-tk-per td:nth-child(2) {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.dv-tk-per td:last-child {
+  min-width: 260px;
+}
+
+.dv-tk-clips th,
+.dv-tk-clips td {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.dv-tk-chip {
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+}
+
+.dv-tk-chip:hover {
+  transform: var(--lift);
+  border-color: var(--ink);
+  background: var(--surface);
+}
+
+.dv-tk-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.dv-tk-warn {
+  color: #9a2c0c;
+  font-weight: 600;
+}
+
+.dv-tk-spi {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 5px;
+  background: var(--signal);
+  color: #fff;
+  font: 700 9.5px/1.4 var(--mono);
+  letter-spacing: 0.06em;
+  vertical-align: 1px;
+}
+
+.dv-tk-ok,
+.dv-tk-flag {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font: 600 10.5px/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dv-tk-flag {
+  background: var(--ochre-wash);
+  border-color: var(--ochre-line);
+  color: var(--ochre-ink);
+  cursor: help;
+}
+
+.dv-tk-drawer {
+  padding: 16px 24px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dv-tk-drawer .dv-table-wrap {
+  margin: 0 -8px;
+}
+
+.dv-tk-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.dv-tk-list li {
+  padding: 6px 10px;
+  margin-bottom: 4px;
+  background: var(--ochre-wash);
+  border-left: 3px solid var(--ochre-line);
+  color: var(--ochre-ink);
+}
+
+.dv-tk-list strong {
+  display: block;
+}
+
+.dv-tk-facts {
+  margin: 10px 0 0;
+  color: var(--ink-2);
+  font: 500 12px/1.6 var(--mono);
+}
+
+.dv-tk-steps {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.dv-tk-steps summary {
+  padding: 6px 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dv-tk-steps summary small {
+  margin-left: 6px;
+  color: var(--muted);
+  font: 500 11.5px/1 var(--mono);
+}
+
+.dv-tk-steps .dv-table th,
+.dv-tk-steps .dv-table td {
+  padding: 6px 8px;
+  font-size: 12.5px;
+}
+
+@media (min-width: 1180px) {
+  .dv-tk-kpis {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 /* Small positive interaction video pop-up (assets/js/spi-popup.js) */
